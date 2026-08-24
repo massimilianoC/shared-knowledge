@@ -1,0 +1,11 @@
+# GEMINI.md
+
+This file is an **alias** of [`AGENTS.md`](AGENTS.md). Gemini (Google) must follow **the entirety** of the rules defined there.
+
+## Gemini-specific notes
+
+- Replies to the user: **${PROJECT_LANGUAGE}** (project default). Code and identifiers: English.
+- Use the file-search tools before reading: do not enumerate folders by hand.
+- Prefer surgical edits over full-file rewrites.
+
+Read [`AGENTS.md`](AGENTS.md) now.

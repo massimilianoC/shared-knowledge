@@ -1,0 +1,133 @@
+# Integration Contract — ${PROJECT_NAME} ↔ ${SSOT_NAME}
+
+> Stability: **evolving** (tracks the SSoT's evolution). Changes recorded in the changelog at the bottom.
+
+> This document describes **how** this repo talks to ${SSOT_NAME}. The **what** (entities, endpoints, payloads) is owned by ${SSOT_NAME} and lives in its own documentation.
+
+## 1. Premises
+
+- ${SSOT_NAME} is the SSoT. This repo consumes via a single boundary.
+- This repo uses **only** the `${ADMIN_API_PREFIX}` family of endpoints (or equivalent).
+- <event/stream conventions if applicable>
+- No raw access to underlying data stores.
+
+## 2. Boundary discovery
+
+Configuration via env:
+
+```
+${ENV_VAR_API_BASE}=https://api.${PROJECT_DOMAIN}
+```
+
+In dev: point at local backend or BFF.
+
+A runtime config (`${RUNTIME_CONFIG_ENDPOINT}`) returns non-secret bootstrap parameters: app name, default locale, feature flags, telemetry DSN, ...
+
+## 3. Authentication (summary, full detail in `SECURITY_AND_AUTH.md`)
+
+- Login: `POST ${LOGIN_ENDPOINT}`
+- Refresh: `POST ${REFRESH_ENDPOINT}`
+- Logout: `POST ${LOGOUT_ENDPOINT}`
+- Profile: `GET ${ME_ENDPOINT}`
+
+The boundary client handles auth + a single refresh attempt on 401 before forcing logout.
+
+## 4. HTTP conventions (binding)
+
+| Aspect | Rule |
+| :--- | :--- |
+| Base path | `${ADMIN_API_PREFIX}/...` |
+| Versioning | Header `X-Schema-Version` (or path `/v1/`) declared and verified |
+| Content | `application/json` for data; `multipart/form-data` for uploads |
+| Errors | `application/problem+json` with `{ type, title, status, detail, correlationId }` |
+| Idempotency | `Idempotency-Key: <uuid-v4>` on every `POST`/`PUT`/`PATCH`/`DELETE` |
+| Tracing | `traceparent` (W3C) propagated |
+| Pagination | `?page=`, `?pageSize=` or `?cursor=` — consistent per family |
+| List response | `{ total?, page?, pageSize?, nextCursor?, items: [...] }` |
+| Sort | `?sort=field:asc,other:desc` |
+| Filter | `?filter=<base64-json>` or `POST /search` for long filters |
+| Cache | `ETag` + `If-None-Match` where useful |
+
+## 5. Schema → typed boundary
+
+For each resource exposed by `${ADMIN_API_PREFIX}/...`:
+
+1. **Schema** in `<schema-location>/<resource>.schema.<ext>`.
+2. **Derived type** in the same file.
+3. **Boundary client hooks** (one per operation).
+4. **Schema tests**: positive + negative example payloads.
+
+If ${SSOT_NAME} publishes a machine-readable contract (OpenAPI, Protobuf, ...), mirror it under `docs/api/` and generate types from there.
+
+## 6. Long-running operations: `Job` pattern
+
+Any mutation marked asynchronous returns:
+
+```json
+{
+  "jobId": "...",
+  "status": "queued",
+  "kind": "...",
+  "createdAt": "..."
+}
+```
+
+UI pattern:
+
+1. Mutation receives `jobId`.
+2. Non-blocking toast with "Open job" link.
+3. Poll `GET ${ADMIN_API_PREFIX}/jobs/{id}` every 2–5s (or SSE / WebSocket if available).
+4. On terminal status → toast + targeted cache invalidation.
+
+## 7. Upload and download
+
+- Preferred upload: **signed URLs**.
+  1. `POST ${UPLOAD_SIGN_ENDPOINT}` → `{ uploadUrl, fields, draftId }`.
+  2. `PUT` directly to `uploadUrl`.
+  3. `POST ${UPLOAD_FINALIZE_ENDPOINT}` → finalized asset.
+- Downloads: short-lived signed URL via `POST ${SIGNED_URL_ENDPOINT}`.
+- Client never manipulates raw storage paths.
+
+## 8. Server events (if applicable)
+
+- `${EVENT_STREAM_ENDPOINT}`
+- Topics and payload schemas defined per ADR.
+- Use streams for **progress / notifications**, not for large data (prefer paginated reads).
+
+## 9. Feature flags
+
+- Boot: `GET ${FLAGS_EFFECTIVE_ENDPOINT}` returns the effective map for the current subject.
+- Refresh on login or every N minutes.
+- Never mutate from the client outside the dedicated feature-flags page.
+
+## 10. Error → UX mapping
+
+| HTTP | UI |
+| :--- | :--- |
+| 400 | Inline field errors |
+| 401 | Single refresh attempt, then redirect to login |
+| 403 | Empty state "Permission denied — `correlationId`" |
+| 404 | Contextual empty state |
+| 409 | Conflict banner + suggest reload |
+| 422 | Validation + suggestion |
+| 429 | Toast with controlled retry / backoff |
+| 5xx | Toast + `correlationId` + telemetry signal |
+
+## 11. Contract testing
+
+- **Schema tests**: each schema has positive + negative example.
+- **Contract tests**: real payloads from ${SSOT_NAME} stored as fixtures; CI validates schemas still match.
+- **Dev mocks**: MSW (or equivalent) for offline dev. Mocks are marked `// TODO(M<n>): replace with real endpoint` when standing in for a not-yet-shipped endpoint.
+
+## 12. When an endpoint is missing
+
+1. Open cross-repo issue against ${SSOT_NAME} with proposed signature.
+2. Add a proposal under `docs/architecture/proposals/`.
+3. In dev, stub via MSW.
+4. **Never** simulate domain logic in production.
+
+## 13. Changelog
+
+| Date | Change | Author |
+| :--- | :--- | :--- |
+| YYYY-MM-DD | Initial version | bootstrap |

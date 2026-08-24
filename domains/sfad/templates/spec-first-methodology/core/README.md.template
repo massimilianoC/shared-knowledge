@@ -1,0 +1,31 @@
+# ${PROJECT_NAME}
+
+${PROJECT_VISION}
+
+> This repository contains **${PROJECT_KIND}**. The Single Source of Truth (SSoT) for this system is **${SSOT_NAME}**.
+
+## TL;DR
+
+- **Audience**: ${PRIMARY_AUDIENCE}
+- **Mission**: ${PROJECT_MISSION}
+- **Tech stack**: see [`docs/architecture/TECH_STACK.md`](docs/architecture/TECH_STACK.md)
+- **Agentic development**: read [`AGENTS.md`](AGENTS.md) before any task. Per-assistant aliases ([`CLAUDE.md`](CLAUDE.md), [`GEMINI.md`](GEMINI.md), [`COPILOT.md`](COPILOT.md)) point at the same contract.
+
+## Documentation entry points
+
+| Document | Purpose |
+| :--- | :--- |
+| [`AGENTS.md`](AGENTS.md) | Binding rules for AI agents writing code in this repo |
+| [`docs/INDEX.md`](docs/INDEX.md) | Navigable index of all documentation |
+| [`docs/vision/VISION_AND_MISSION.md`](docs/vision/VISION_AND_MISSION.md) | Vision, mission, audience, non-objectives |
+| [`docs/architecture/ARCHITECTURE_OVERVIEW.md`](docs/architecture/ARCHITECTURE_OVERVIEW.md) | Technical Single Source of Truth — guides all development |
+| [`docs/planning/ROADMAP_MILESTONES.md`](docs/planning/ROADMAP_MILESTONES.md) | Milestones M0 → Mn with goals and Definitions of Done |
+| [`docs/planning/EXECUTION_SPEC.md`](docs/planning/EXECUTION_SPEC.md) | Current micro-slices in execution |
+
+## Current status
+
+`M0 — Bootstrap` (see [roadmap](docs/planning/ROADMAP_MILESTONES.md)).
+
+## Methodology
+
+This repository follows the **Spec-First Agentic Development (SFAD)** methodology. The full kit lives in [`docs/methodology/`](docs/methodology/) (or in your shared internal repo of methodology kits).

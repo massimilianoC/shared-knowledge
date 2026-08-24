@@ -1,251 +1,96 @@
-# AI Agent Guidelines — Shared Knowledge Repository
+# AI Agent Guidelines - Shared Knowledge Repository
 
-This document is the master reference for all AI agents working in this repository.
-Claude, GitHub Copilot, Codex, and other compatible agents must follow these guidelines.
+This is the binding guide for people and AI agents that maintain this repository.
 
----
+## Purpose
 
-## Repository purpose
+The repository turns validated project experience into reusable, copyable domain packages. A package contains its skills, agents, knowledge, and any domain-specific templates together.
 
-This repository collects knowledge extracted from real projects and transforms it into:
-- **skills** — reusable capabilities, documented and cross-linked
-- **agents** — specialized agents composed of multiple related skills
-- **knowledge** — patterns, architectural decisions, and domain knowledge
+## Language
 
-The goal is to let future projects reuse knowledge that has already been validated in production.
+All created or updated structured content is written in English. Inbox material may be in any language; extract and normalize its concepts into English.
 
----
-
-## Rule 0 — Output language
-
-All structured outputs created or updated in this repository must be written in **English**.
-This includes:
-- skills
-- agents
-- knowledge documents
-- templates
-- summaries produced during inbox processing
-
-Raw inbox notes may be written in any language, but generated repository content must be English.
-
----
-
-## Folder structure (domain-first taxonomy)
-
-Every artifact lives **inside a domain folder** (`llm/`, `sfad/`, or a new one you create). Inside a domain, files are grouped by competence class for skills, by file type for knowledge, and at the domain root for agents.
+## Canonical layout
 
 ```text
-inbox/                   ← raw Markdown files to process (user input)
-  processed/             ← files already processed
+inbox/                         raw source material
+  processed/                   archived source material after ingestion
 
-skills/
+domains/
   <domain>/
-    <class>/             ← competence class (output, platform, bootstrap,
-      <skill>.md         ←  governance, execution, coordination, …)
-agents/
-  <domain>/
-    <agent>.md
-knowledge/
-  <domain>/
-    patterns/            ← architectural and technical patterns
-    decisions/           ← decisions with rationale (ADR style)
-    domain/              ← domain knowledge (industry, client, context)
-templates/
-  skill-template.md
-  agent-template.md
+    README.md                  package entry point and adoption instructions
+    skills/<class>/            atomic reusable capabilities
+    agents/                    compositions of related skills
+    knowledge/
+      patterns/                reusable technical or architectural patterns
+      decisions/               ADR-style choices and rationale
+      domain/                  domain context and adoption guidance
+    templates/                 optional domain-specific starter assets
+
+templates/                     repository-wide skill and agent templates
 ```
 
-### Current domains
+Current packages are `sfad/`, `llm/`, `rag/`, and `capture/`. Read `domains/<domain>/README.md` before using or changing a package.
 
-- `llm/` — LLM Engineering. Skill classes: `output/`, `platform/`.
-- `sfad/` — Spec-First Agentic Development. Skill classes: `bootstrap/`, `governance/`, `execution/`, `coordination/`.
+## Ingestion workflow
 
-### Adding a new domain
+1. Read the inbox source completely.
+2. Identify the target domain. Reuse an existing domain unless the content cannot fit it.
+3. Check related package files for overlap before creating anything.
+4. Create patterns, decisions, and domain notes under `domains/<domain>/knowledge/`.
+5. Create atomic skills under `domains/<domain>/skills/<class>/`. A class groups at least two clearly related skills; otherwise keep the skill directly under `skills/`.
+6. Create or update an agent under `domains/<domain>/agents/` only when at least two skills form a coherent workflow.
+7. Add or update templates when the domain needs reusable starter assets.
+8. Update `domains/<domain>/README.md` and `MAP.md`.
+9. Move the raw source to `inbox/processed/`.
+10. Validate links, naming, English language, and package copyability.
 
-When inbox content does not fit any existing domain:
+## Quality rules
 
-1. Create `skills/<new-domain>/`, `agents/<new-domain>/`, `knowledge/<new-domain>/{patterns,decisions,domain}/`.
-2. Inside `skills/<new-domain>/`, create competence classes only when there are ≥ 2 related skills; otherwise keep skills directly under the domain folder until enough exist to warrant subdivision.
-3. Add the new domain to `MAP.md` under "Index by domain".
+### Skills
 
-### Adding a new competence class
+Every skill must contain: Description, Expected inputs, Produced outputs, Steps / Procedure, Common pitfalls to avoid, Related skills, and Source. It must be reusable beyond one project.
 
-Inside an existing domain, create a new class folder (`skills/<domain>/<new-class>/`) only when there are ≥ 2 skills that share a clear scope (e.g., "release coordination", "prompt engineering"). A class with a single skill is premature — keep it next to its siblings until it accumulates company.
+### Agents
 
----
+Every agent must contain: Role, Included skills, When to use, When NOT to use, Recommended system prompt, Required context, Known limitations, and Source. Include at least two linked skills.
 
-## Rule 1 — How to process a file in inbox/
+### Knowledge
 
-When the user says **"elabora inbox"** or provides a new Markdown file:
+Patterns explain repeatable mechanisms. Decisions state the choice, context, options, consequences, and application. Domain notes provide scope, terminology, and adoption context. Cross-link rather than duplicate.
 
-### Step 1 — Read and classify
+## Package rules
 
-Read the file and identify:
+- Internal links must be relative and resolve after copying the whole `domains/<domain>/` folder.
+- A domain package is the unit of reuse. Do not distribute only an agent without its linked skills and knowledge.
+- Domain-specific templates live inside the package. Generic authoring templates remain in root `templates/`.
+- Add a new domain only when it has at least one reusable skill and one supporting knowledge artifact.
+- Use kebab-case for skills, agents, decisions, and domain notes; use SCREAMING_SNAKE_CASE for patterns.
 
-- **Domain** the content belongs to (`llm/`, `sfad/`, or a new domain you create).
-- **Technical patterns** → go to `knowledge/<domain>/patterns/`
-- **Architectural decisions** → go to `knowledge/<domain>/decisions/`
-- **Domain knowledge** → goes to `knowledge/<domain>/domain/`
-- **Reusable capabilities or procedures** → become one or more files in `skills/<domain>/<class>/`
+## Operating constraints
 
-### Step 2 — Create the knowledge files
+- Consolidate instead of duplicating.
+- Do not modify or delete existing artifacts without explicit user authorization.
+- Ask before a large reorganization; once approved, preserve link integrity and update all navigation documents.
+- Keep `MAP.md` and the relevant package README accurate after every change.
 
-For each meaningful pattern or decision, create a file under the right domain folder:
-
-- Patterns: `knowledge/<domain>/patterns/SCREAMING_SNAKE_CASE.md` (e.g., `LLM_JSON_PARSING.md`).
-- Decisions: `knowledge/<domain>/decisions/kebab-case.md` (e.g., `score-vs-first-match.md`).
-- Domain notes: `knowledge/<domain>/domain/kebab-case.md`.
-
-### Step 3 — Create the skills
-For each reusable capability or repeatable procedure, create a file in `skills/<domain>/<class>/`.
-Use the template in `templates/skill-template.md`. File names are kebab-case (e.g., `llm-json-parsing.md`).
-Pick the **competence class** that matches the skill's scope (output, platform, bootstrap, governance, execution, coordination, …). If no existing class fits and you have ≥ 2 related skills, create a new class folder; otherwise place the skill at `skills/<domain>/<existing-closest-class>/` and revisit later.
-
-**One skill = one clearly defined capability.**
-If a capability is too large, split it into smaller skills and link them in the “Related skills” section.
-
-### Step 4 — Check affinity with existing skills and knowledge
-Before creating new files, look for overlap with existing ones:
-- Skills in the same domain → may share sections or should evolve together
-- Similar patterns → should be consolidated into one updated file
-- Related decisions → should be cross-linked
-
-### Step 5 — Create or update agents
-After creating the skills, verify whether:
-- **An agent already exists** in that domain → add the new skills to its “Included skills” section
-- **There are 2+ strongly related new skills** → create a new agent in `agents/`
-- **No suitable agent exists** → do not force agent creation
-
-### Step 6 — Move the processed file
-```
-inbox/file-name.md → inbox/processed/file-name.md
-```
-
----
-
-## Rule 2 — Criteria for creating a skill
-
-Create a skill when the content describes:
-- A repeatable procedure with clear steps
-- A technical pattern applicable in multiple contexts
-- A set of operating rules with explicit inputs and outputs
-- A checklist of pitfalls to avoid
-
-**Do not create a skill** for:
-- Implementation details specific to a single project
-- One-off configuration that is not reusable
-- Copy-paste code with no transferable logic
-
----
-
-## Rule 3 — Criteria for creating or updating an agent
-
-### Create a new agent when:
-- There are **at least 2 skills** in the same functional domain
-- The skills together cover a complete workflow (input → output)
-- The agent would have a clear role and a natural user
-
-### Update an existing agent when:
-- A new skill fits the agent’s domain
-- A new decision or pattern changes the recommended behavior
-- A new LLM model behavior has been documented
-
-### Do not create an agent when:
-- There is only 1 skill in the domain
-- The available skills are too heterogeneous
-- The agent would be too generic (for example, “agent for everything”)
-
----
-
-## Rule 4 — Affinity detection across knowledge
-
-When you load new knowledge, check for affinity across these dimensions:
-
-| Dimension | How to verify it |
-|---|---|
-| **Technical domain** | Same technology, language, or framework |
-| **Structural pattern** | Same type of problem (parsing, caching, retry, etc.) |
-| **LLM model** | Same model → update the agent’s bug table |
-| **Workflow phase** | Same pipeline point (input, processing, output) |
-
-If the affinity is strong (same domain + same pattern), **consolidate** instead of duplicating:
-- Add a section to the existing knowledge file
-- Update the skill with the new pattern
-- Add a row to the agent’s bug table
-
----
-
-## Rule 5 — Format and conventions
-
-### File names and locations
-
-| Type | Format | Example path |
-|---|---|---|
-| skill | kebab-case | `skills/llm/output/llm-json-parsing.md` |
-| agent | kebab-case | `agents/llm/llm-output-processor.md` |
-| pattern | SCREAMING_SNAKE_CASE | `knowledge/llm/patterns/LLM_JSON_PARSING_GUIDELINES.md` |
-| decision | kebab-case | `knowledge/llm/decisions/score-vs-first-match.md` |
-| domain note | kebab-case | `knowledge/sfad/domain/sfad-methodology.md` |
-
-### Required content for each skill
-- Description (1–2 lines)
-- Expected inputs / produced outputs
-- Main steps or rules
-- Pitfalls to avoid
-- Related skills
-- Source (inbox file or original project)
-
-### Required content for each agent
-- Role (1–2 lines)
-- Included skills (with links)
-- When to use / when not to use
-- Recommended system prompt
-- Known limitations
-- Source
-
-### Required content for each decision
-- The decision taken (first line)
-- **Why** (rationale and context)
-- **Rejected alternative** and why it was rejected
-- **How to apply it** in new contexts
-
----
-
-## Rule 6 — Repository evolution over time
-
-This repository is alive. When you add new knowledge:
-1. **Update** existing skills and agents if the domain overlaps
-2. **Add** bug tables, pitfalls, or new sections to existing files when appropriate
-3. **Link** new files to older ones with cross-references
-4. **Never duplicate** content — prefer linking to an existing section
-
----
-
-## Expected output for each processing session
-
-When the user says “elabora inbox” or something equivalent, produce a summary like this:
+## Processing report
 
 ```text
-## Processing completed
+## Processing: <source>
 
-### Files processed
-- inbox/file-name.md
-
-### Domain
-- llm/ | sfad/ | <new-domain>/
+Package: domains/<domain>/
+Classification: pattern | decision | domain | skill | mixed
 
 ### Created
-- knowledge/<domain>/patterns/PATTERN_NAME.md
-- skills/<domain>/<class>/skill-name.md
-- agents/<domain>/agent-name.md (if applicable)
+- <path> - <description>
 
 ### Updated
-- skills/<domain>/<class>/existing-skill.md (added section X)
-- agents/<domain>/existing-agent.md (added skill Y)
+- <path> - <change>
 
 ### Affinities found
-- skill-name.md ↔ other-skill.md (same domain + class)
+- <new artifact> <-> <existing artifact> - <reason>
 
-### Moved to processed
-- inbox/processed/file-name.md
+### Archived source
+- inbox/<source> -> inbox/processed/<source>
 ```

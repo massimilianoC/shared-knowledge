@@ -1,0 +1,113 @@
+# External Dependency Enablement Spec — ${PROJECT_NAME} ↔ ${SSOT_NAME}
+
+> Stability: **evolving**. Co-owned with the ${SSOT_NAME} team.
+>
+> Purpose: make explicit **what ${SSOT_NAME} must expose** to unblock this-repo releases. Operational detail for M0–M2, anticipation for later milestones.
+
+## Related documents
+
+- [`ROADMAP_MILESTONES.md`](ROADMAP_MILESTONES.md)
+- [`EXECUTION_SPEC.md`](EXECUTION_SPEC.md)
+- [`../architecture/INTEGRATION_CONTRACT.md`](../architecture/INTEGRATION_CONTRACT.md)
+- [`../requirements/FUNCTIONAL_REQUIREMENTS.md`](../requirements/FUNCTIONAL_REQUIREMENTS.md)
+
+## 1. Operating principles
+
+- ${SSOT_NAME} is the SSoT: this-repo never substitutes with its own logic.
+- ${SSOT_NAME} works **at least one micro-slice ahead** of this repo on imminent features.
+- For each feature, the contract must cover the real usage cycle: **CRUD or equivalent lifecycle actions**, not just read endpoints.
+- Where hard delete is not appropriate, equivalent lifecycle actions are exposed (`archive`, `retire`, `suspend`, `reactivate`, `revoke`).
+- Every mutation honors: `Idempotency-Key`, `application/problem+json`, server-side audit, server-side permissions, `X-Schema-Version`.
+- Every endpoint family ships with example payloads and at least one documented error case.
+
+## 2. Minimum deliverables per slice (Definition of "ready")
+
+For a slice to be considered **backend-ready**, all of these must exist:
+
+1. Endpoints and HTTP methods agreed.
+2. Request/response schema with positive examples and at least one error case.
+3. Required permissions and 403 behavior.
+4. Audit rules for sensitive mutations.
+5. Lifecycle semantics: real delete, soft-delete, or alternative action.
+6. Seed/fixture compatible with this-repo dev/test.
+7. Changelog entry if the contract changes after this-repo started the slice.
+
+## 3. Definition of "useful CRUD" for this project
+
+- `Create`: create the resource or a draft useful to the UI.
+- `Read`: list, detail, filters, pagination, related lookups.
+- `Update`: partial or full update.
+- `Delete`: real hard-delete only if the domain allows; otherwise documented lifecycle action.
+
+This repo does not start work on a resource if ${SSOT_NAME} exposes only `GET` without the mutations the UI must support in the same milestone.
+
+---
+
+## M0 — ${SSOT_NAME} bootstrap contract
+
+### Endpoints
+
+| Area | Endpoint | Method | Required | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| Auth | `${LOGIN_ENDPOINT}` | `POST` | yes | supports success, wrong credentials, `mfaRequired` future |
+| Auth | `${REFRESH_ENDPOINT}` | `POST` | yes | needed to unblock M1 |
+| Auth | `${LOGOUT_ENDPOINT}` | `POST` | yes | invalidates session on SSoT |
+| Profile | `${ME_ENDPOINT}` | `GET` | yes | returns roles, permissions, scopes, locale |
+| Runtime config | `${RUNTIME_CONFIG_ENDPOINT}` | `GET` | yes | non-secret bootstrap config |
+| Feature flags | `${FLAGS_EFFECTIVE_ENDPOINT}` | `GET` | yes | may be minimal stub but with stable shape |
+| Health | `/healthz` | `GET` | yes | useful for CI / local integration |
+
+### Agreed payload minimums
+
+- `POST ${LOGIN_ENDPOINT}`:
+  - request: `{ email, password }`
+  - response: `{ accessToken, refreshToken?, mfaRequired?, expiresIn? }`
+- `GET ${ME_ENDPOINT}`:
+  - response: `{ id, email, displayName, roles[], permissions[], scopes[], locale, mfaEnabled }`
+- `GET ${RUNTIME_CONFIG_ENDPOINT}`:
+  - response: `{ appName, apiBaseUrl?, defaultLocale, supportedLocales[], sentryDsn?, featureFlagsBootstrap? }`
+
+### M0 readiness checks
+
+- [ ] login/refresh/logout documented and testable
+- [ ] `${ME_ENDPOINT}` returns real permissions (or stable equivalent shape)
+- [ ] `problem+json` and `X-Schema-Version` in place
+- [ ] sample fixtures available for FE/MSW
+
+---
+
+## M1 — <Theme>
+
+### Endpoints
+
+| Area | Endpoint | Method | Required | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| ... | ... | ... | ... | ... |
+
+### Minimum resource contracts
+
+- ...
+
+### M1 readiness checks
+
+- [ ] ...
+
+---
+
+## M2 — <Theme>
+
+<!-- Build per milestone -->
+
+---
+
+## Pending requests backlog
+
+| Date | Request | Target milestone | Status | Owner |
+| :--- | :--- | :--- | :--- | :--- |
+| YYYY-MM-DD | ... | M? | pending | <name> |
+
+## Changelog
+
+| Date | Change | Author |
+| :--- | :--- | :--- |
+| YYYY-MM-DD | Initial version | bootstrap |

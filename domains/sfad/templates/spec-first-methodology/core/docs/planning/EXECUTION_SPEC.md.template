@@ -1,0 +1,104 @@
+# Execution Spec — ${PROJECT_NAME}
+
+> Stability: **evolving**. Operational tracker for the current and upcoming milestones.
+>
+> Decomposes milestones into **vertical, testable, closeable micro-slices**.
+
+## Related documents
+
+- [`ROADMAP_MILESTONES.md`](ROADMAP_MILESTONES.md)
+- [`EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md`](EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md)
+- [`../requirements/FUNCTIONAL_REQUIREMENTS.md`](../requirements/FUNCTIONAL_REQUIREMENTS.md)
+- [`../architecture/INTEGRATION_CONTRACT.md`](../architecture/INTEGRATION_CONTRACT.md)
+
+## 1. Execution rules
+
+- One slice in progress at a time per owner.
+- Each slice produces a verifiable check.
+- Blocked slices update [`EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md`](EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md).
+- A slice closes only after this document is updated with state, check result, residual gaps.
+
+## 2. Tracker states
+
+| State | Meaning |
+| :--- | :--- |
+| `planned` | Not started |
+| `ready-backend` | Upstream contract available (or explicitly stubbed) |
+| `in-progress` | Implementation under way |
+| `blocked` | Halted by missing contract / pending decision |
+| `qa-ready` | Implementation done; check pending |
+| `done` | Check passed; docs updated |
+
+## 3. Slice closure criteria
+
+A slice is `done` only if:
+
+1. The backend contract used is real or officially approved.
+2. The integrated UI/client is reachable end-to-end.
+3. There is at least one check specific to the slice.
+4. Any residual gap is recorded in the tracker.
+
+---
+
+## Micro-slices M0
+
+| Slice | Goal | Backend prereq | This-repo scope | Check | FR |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| M0.1 | Bootstrap repo and quality gates | none | scaffold, lint, test, build, folder structure | `typecheck`, `lint`, `test`, `build` green | FR.20.1 |
+| M0.2 | App shell and mock-protected routing | minimum shape `${RUNTIME_CONFIG_ENDPOINT}` or agreed fixture | shell, router, guard mock | smoke `/login -> /landing` | FR.1.1 |
+| M0.3 | Boundary client + error model | shape `problem+json`, `X-Schema-Version`, `traceparent` | http client, interceptors, error mapper | unit test of the client + error parsing | FR.1.2 |
+| M0.4 | Mock login + local session | shape login agreed | login form, mock auth store, logout, cache invalidation | form submit + logout tests | FR.1.1, FR.1.2 |
+| M0.5 | Test harness + fixtures aligned | M0 fixtures from upstream or agreed spec | MSW, factories, smoke Playwright, helpers | stable smoke E2E in CI | FR.20.5 |
+
+## Micro-slices M1
+
+<!-- Build as M1 opens -->
+
+| Slice | Goal | Backend prereq | This-repo scope | Check | FR |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| M1.1 | ... | ... | ... | ... | ... |
+
+## Micro-slices M2
+
+<!-- Build as M2 opens -->
+
+| Slice | Goal | Backend prereq | This-repo scope | Check | FR |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+
+---
+
+## 4. Recommended execution order
+
+Binding order (until a documented decision says otherwise):
+
+1. M0.1
+2. M0.2
+3. M0.3
+4. M0.4
+5. M0.5
+6. M1.1
+7. ...
+
+## 5. Progress tracker
+
+### Tracker M0
+
+| Slice | Status | Backend | Frontend | Planned check | Gap | Last update |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| M0.1 | planned | n/a | n/a | typecheck+lint+test+build green | — | YYYY-MM-DD |
+| M0.2 | planned | pending fixture | n/a | smoke /login → /landing | — | YYYY-MM-DD |
+| M0.3 | planned | pending error-shape agreement | n/a | client unit tests | — | YYYY-MM-DD |
+| M0.4 | planned | pending login shape | n/a | form+logout tests | — | YYYY-MM-DD |
+| M0.5 | planned | pending fixtures | n/a | CI smoke green | — | YYYY-MM-DD |
+
+### Tracker M1
+
+| Slice | Status | Backend | Frontend | Planned check | Gap | Last update |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| M1.1 | planned | ... | ... | ... | ... | ... |
+
+### Tracker M2
+
+| Slice | Status | Backend | Frontend | Planned check | Gap | Last update |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| M2.1 | planned | ... | ... | ... | ... | ... |

@@ -1,41 +1,19 @@
-# Windsurf Rules — Shared Knowledge Repository
+# Windsurf Rules - Shared Knowledge Repository
 
-This file is a thin alias. The **binding rules** live in [AI_GUIDELINES.md](AI_GUIDELINES.md).
-Cascade (Windsurf AI) must follow the entirety of the rules defined there.
+Read [AI_GUIDELINES.md](AI_GUIDELINES.md) before processing any source.
 
-## Project context
+## Workflow
 
-Knowledge-management repository for AI agents. Transforms knowledge extracted from real projects into reusable skills and agents, organized by **domain-first taxonomy** (`llm/`, `sfad/`, …).
+1. Read the inbox source and target domain package.
+2. Classify and extract reusable patterns, decisions, skills, agents, and templates.
+3. Write them under `domains/<domain>/`.
+4. Preserve relative links and update package README plus `MAP.md`.
+5. Archive the source under `inbox/processed/`.
 
-## Cascade-specific notes
+## Rules
 
-- Reply language: match the user. All generated repository content: English.
-- Code, identifiers, file names, commit messages: English.
-- Use relative links between files; never absolute or external links to local files.
-- An agent requires ≥ 2 included skills; never create an agent with one skill.
-- Before creating any new file, check for affinity with existing siblings in the same domain folder.
-
-## Naming and locations
-
-- Patterns: `knowledge/<domain>/patterns/SCREAMING_SNAKE_CASE.md`
-- Decisions: `knowledge/<domain>/decisions/kebab-case.md`
-- Domain notes: `knowledge/<domain>/domain/kebab-case.md`
-- Skills: `skills/<domain>/<class>/kebab-case.md`
-- Agents: `agents/<domain>/kebab-case.md`
-
-## Affinity priorities
-
-| Affinity detected | Action |
-| --- | --- |
-| Same domain + same pattern | Update existing file |
-| Same domain, different pattern | Create new skill + cross-link |
-| Different domain, similar pattern | Create new skill with cross-reference |
-| Same target agent | Add skill to existing agent |
-| Genuinely new domain | Create the full `skills/<new>/`, `agents/<new>/`, `knowledge/<new>/{patterns,decisions,domain}/` tree |
-
-## Read first
-
-1. [AI_GUIDELINES.md](AI_GUIDELINES.md) — master rules.
-2. [CLAUDE.md](CLAUDE.md) — supported commands and processing behavior.
-3. [MAP.md](MAP.md) — current skills/agents/knowledge per domain.
-4. [CONTRIBUTING.md](CONTRIBUTING.md) — contribution workflow.
+- Generated content is English.
+- A domain package contains its own `skills/`, `agents/`, `knowledge/`, and optional `templates/`.
+- Use kebab-case except for SCREAMING_SNAKE_CASE patterns.
+- Agents require at least two related skills.
+- Consolidate overlapping knowledge rather than duplicating it.

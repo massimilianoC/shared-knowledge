@@ -1,0 +1,105 @@
+# Design Principles — ${PROJECT_NAME} (Frontend React flavor)
+
+> Stability: **stable**. Designed for **power-user admin consoles**.
+
+## 1. Professional density
+
+- Layout targets **desktop 1366×768+**; optimal at 1920×1080.
+- Compact tables, row height < 48px, sticky header, persistent filters.
+- Avoid huge modals: prefer **side panels** or **detail drawers** that preserve list context.
+- Long forms split into **steppers** or navigable sections.
+
+## 2. Coherence and predictability
+
+- Same patterns across all domains: same position of filters, pagination, bulk actions.
+- Consistent verbs: "Approve" / "Reject" / "Suspend" / "Reactivate" / "Archive" / "Delete permanently".
+- One component variant per purpose (one primary button — not three).
+
+## 3. Perceived safety
+
+- Destructive actions always **double confirmation**: dialog + typing the resource name.
+- Mandatory `reason` for: override, hard delete, classification reversal, impersonate.
+- Confirmations show "What will happen" (e.g., "234 media will be deleted, 12 classifications left without target").
+- Destructive confirmations **not** dismissable accidentally (no close on outside click).
+
+## 4. Long-running operations as first-class citizens
+
+- Every long action → `Job` with dedicated UI.
+- Non-blocking toast + "Open job" button.
+- Jobs page always reachable from topbar (badge with running count).
+
+## 5. Feedback
+
+- Success: green toast right, auto-dismiss 4s.
+- Error: red toast, manual dismiss, copyable `correlationId`.
+- In-progress: skeleton; never full-page spinner if cached data exists.
+- Empty states: minimal illustration + explanation + doc/action link.
+
+## 6. Persistent filters and Saved Views
+
+- List filters live in the **URL** (`?filter=...&sort=...`).
+- Saved Views: saveable, shareable, "pinnable" on dashboard.
+- System defaults (read-only) for common cases (e.g., "Devices to approve", "Media in moderation").
+
+## 7. Bulk actions
+
+- Multi-selection with `Shift+click` and `Ctrl+A`.
+- Action bar appears above list when ≥ 1 selected.
+- Counter + applicable buttons (recomputed by permissions).
+
+## 8. Accessibility
+
+- WCAG 2.1 AA minimum (see NFR).
+- Focus always visible, logical order.
+- `aria-live` for toasts and job progress.
+- Skip-link "Go to main content".
+- AAA contrast for body text in dark mode.
+
+## 9. Internationalization
+
+- All strings from dictionary (`${PROJECT_DEFAULT_LOCALE}`/`${PROJECT_FALLBACK_LOCALE}`).
+- Date/number formats via `Intl` with admin's locale.
+- Correct pluralization (`{count, plural, one {# item} other {# items}}`).
+
+## 10. Dark mode
+
+- Available from day-1, toggle in topbar, saved on profile.
+- Neutral palette; accent colors for states (success/warning/error/info).
+- Avoid separate assets for dark vs light when possible.
+
+## 11. Standard design-system components
+
+Minimum list (based on shadcn/ui + Radix):
+
+- Button, IconButton, Toggle
+- Input, Textarea, Select, Combobox, MultiSelect, DatePicker, RangePicker, Map(picker)
+- Table (TanStack), DataGrid wrapper
+- Dialog, AlertDialog (destructive), Sheet/Drawer (detail panel)
+- Tabs, Accordion, Collapsible
+- Badge (status), Pill (filter), Tag
+- Toast (sonner-like)
+- Skeleton, Spinner (local, not global)
+- EmptyState, ErrorState
+- StatCard (overview)
+- Timeline (audit, job log)
+- DiffViewer (config/policy diff)
+- JsonEditor (schema-aware)
+
+## 12. User error diagnostics
+
+- Error toast includes `correlationId` (copyable).
+- Page `/admin/diagnostics` shows: build version, language, browser locale, last 20 client errors (in memory), anonymized `${ME_ENDPOINT}` info.
+
+## 13. Perceived performance
+
+- Optimistic update only for reversible toggles and tags.
+- Prefetch on hover of detail links.
+- Route-level code splitting; lazy import for non-landing pages.
+- Virtualization for lists > 200 rows.
+
+## 14. What we don't do (motivated constraints)
+
+- We do not introduce competing UI frameworks (Material, Ant) alongside shadcn/ui.
+- We do not invent layouts: pages reuse the same templates (list, detail, form, dashboard).
+- We do not render unsanitized HTML.
+- We do not block the UI on long operations: jobs always.

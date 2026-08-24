@@ -1,0 +1,25 @@
+# Session Handoff — ${TASK_OR_SLICE}
+
+> Temporary operational record. Durable requirements, decisions, and delivery state belong in their canonical project documents.
+
+## Status
+
+- **Objective**: `${OBJECTIVE}`
+- **Current state**: `${STATE}`
+- **Changed files**: `${CHANGED_FILES}`
+- **Evidence run**: `${COMMANDS_OR_CI_LINKS}`
+- **Blocker**: `${BLOCKER_OR_NONE}`
+- **Next safe action**: `${NEXT_SAFE_ACTION}`
+
+## Canonical references
+
+- Feature spec: `${SPEC_LINK}`
+- Execution slice: `${SLICE_LINK}`
+- ADR / decision: `${ADR_LINK_OR_NONE}`
+
+## Promotion and cleanup
+
+- Facts to promote into canonical docs: `${DURABLE_UPDATES_NEEDED}`
+- Retire this record when: `${RETIREMENT_CONDITION}`
+
+Do not record secrets, credentials, private customer data, or copied production logs.

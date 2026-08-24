@@ -1,0 +1,30 @@
+# Project Constitution — ${PROJECT_NAME}
+
+> Stability: **stable**. This document defines the durable values and decision rules that guide specifications, plans, and implementation.
+
+## Product and user commitments
+
+1. `${USER_OUTCOME_COMMITMENT}`
+2. `${SAFETY_OR_PRIVACY_COMMITMENT}`
+3. `${OPERABILITY_OR_ACCESSIBILITY_COMMITMENT}`
+
+## Engineering commitments
+
+1. Specifications and acceptance evidence precede non-trivial implementation.
+2. Each concern has a named source of truth and boundary.
+3. Verification depth is proportional to the risk of the change.
+4. Architectural decisions are explicit, reversible where possible, and recorded as ADRs.
+5. Agents work autonomously only within approved intent and risk boundaries.
+
+## Decision ownership
+
+| Decision class | Accountable owner | Required artifact |
+| --- | --- | --- |
+| Product scope and acceptance | `${PRODUCT_OWNER}` | Feature spec |
+| Architecture and dependencies | `${TECHNICAL_OWNER}` | ADR |
+| Security/privacy/compliance | `${RISK_OWNER}` | Threat review or ADR |
+| Release acceptance | `${RELEASE_OWNER}` | PR/CI evidence |
+
+## Change rule
+
+Changing this constitution requires an ADR and explicit approval from the accountable owners above.

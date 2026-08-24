@@ -1,0 +1,11 @@
+# COPILOT.md
+
+This file is an **alias** of [`AGENTS.md`](AGENTS.md). GitHub Copilot must follow **the entirety** of the rules defined there.
+
+## Copilot-specific notes
+
+- Suggestions are *suggestions*, not commands: the contract in `AGENTS.md` wins on any conflict.
+- Do not accept completions that introduce libraries or patterns forbidden by `AGENTS.md` §9 / Tech Stack.
+- Comments in code: English, terse. Long rationale belongs in ADRs.
+
+Read [`AGENTS.md`](AGENTS.md) now.

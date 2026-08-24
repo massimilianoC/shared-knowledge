@@ -1,0 +1,131 @@
+# Tech Stack — ${PROJECT_NAME} (Frontend React flavor)
+
+> Stability: **stable**. Changes via ADR in `decisions/`.
+
+## 1. Official stack
+
+| Area | Choice | Min version | Notes |
+| :--- | :--- | :--- | :--- |
+| Language | **TypeScript** | 5.4 | `strict: true`, `noUncheckedIndexedAccess: true` |
+| Runtime BE BFF (opt.) | **Node.js** | 20 LTS | only if a BFF is needed |
+| Bundler / dev server | **Vite** | 5 | SWC plugin for speed |
+| UI library | **React** | 18 | concurrent features |
+| Routing | **react-router** | 6 (data routers) | loader/action pattern |
+| Server state | **@tanstack/react-query** | 5 | hierarchical keys per domain |
+| UI state | **zustand** | 4 | minimal global state |
+| Form | **react-hook-form** | 7 | + `@hookform/resolvers` |
+| Schema validation | **zod** | 3 | boundary + form |
+| Styling | **Tailwind CSS** | 3 | + `tailwind-merge`, `clsx` |
+| Component primitives | **shadcn/ui** (Radix UI) | — | copy-in, no dependency lock-in |
+| Icons | **lucide-react** | latest | |
+| Tables | **@tanstack/react-table** | 8 | headless, customizable |
+| Charts | **Recharts** or **visx** | latest | pick per chart |
+| Maps | **MapLibre GL JS** | 4 | OSS, no vendor lock-in |
+| HTTP client | **ky** or **axios** | latest | ADR M1 decides |
+| Date | **date-fns** | 3 | + `date-fns-tz` for timezones |
+| i18n | **i18next** + `react-i18next` | latest | default `${PROJECT_DEFAULT_LOCALE}`, fallback `${PROJECT_FALLBACK_LOCALE}` |
+| Auth client | custom on JWT/cookie | — | see `SECURITY_AND_AUTH.md` |
+| Test (unit) | **Vitest** | latest | + `@testing-library/react` |
+| Test (E2E) | **Playwright** | latest | smoke per admin page |
+| Mocking dev | **MSW** | 2 | for offline dev |
+| Lint | **ESLint** + `@typescript-eslint` | latest | + `eslint-plugin-react`, `-hooks`, `-jsx-a11y` |
+| Format | **Prettier** | 3 | conflict-free with ESLint |
+| Git hooks | **husky** + **lint-staged** | latest | pre-commit lint + typecheck |
+| Commits | **Conventional Commits** | — | |
+| BFF (opt.) | **Fastify** | 4 | thin edge layer, no domain logic |
+
+## 2. Forbidden dependencies (without ADR)
+
+- Alternative UI libs competing with shadcn/ui (Material UI, Ant Design, Chakra) — heavy and bring conflicting tokens.
+- Redux / Redux Toolkit — over-dimensioned vs zustand + react-query.
+- Moment.js — use `date-fns`.
+- jQuery, full Lodash — use native methods or `lodash-es` per-function.
+
+## 3. Budgets
+
+- **Initial JS bundle**: < 250 KB gzipped (route splitting mandatory).
+- **New dependency**: < 100 KB gzipped or ADR.
+- **Performance**: LCP < 2.5s on typical admin network (fast 3G not a target).
+- **Lighthouse targets** on login + landing: Perf ≥ 85, A11y ≥ 95, Best Practices ≥ 95.
+
+## 4. Folder structure (binding)
+
+```
+.
+├── src/
+│   ├── app/                  # entry, providers, root router, error boundaries
+│   ├── features/             # one domain = one feature
+│   │   ├── <domain1>/
+│   │   ├── <domain2>/
+│   │   └── ...
+│   ├── shared/
+│   │   ├── api/              # http client, problem+json mapper, idempotency
+│   │   ├── ui/               # design system primitives, shadcn-derived
+│   │   ├── hooks/
+│   │   ├── utils/
+│   │   ├── i18n/
+│   │   └── types/
+│   ├── config/               # env, constants, runtime config loader
+│   └── styles/               # tailwind base
+├── public/
+├── tests/
+│   ├── e2e/                  # Playwright
+│   └── mocks/                # MSW handlers
+├── docs/                     # see INDEX
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── tailwind.config.ts
+├── playwright.config.ts
+└── vitest.config.ts
+```
+
+Each `features/<domain>/` follows:
+
+```
+features/<domain>/
+├── api/                # zod schemas + react-query hooks specific to the domain
+├── components/         # reusable components within the domain
+├── pages/              # routed pages
+├── types.ts            # types derived from schemas
+└── index.ts            # public surface (exports hooks/components)
+```
+
+## 5. Import conventions
+
+- Alias `@/features/...`, `@/shared/...`, `@/config/...`.
+- No deep relative imports (`../../../`).
+- A feature does **not** import internals of another feature: only via `index.ts`.
+- `shared/` does **not** import from `features/`.
+
+## 6. Scripts (canonical)
+
+```
+npm run dev          # vite dev server (+ MSW if MOCK=1)
+npm run build        # vite build
+npm run preview      # vite preview
+npm run typecheck    # tsc --noEmit
+npm run lint         # eslint src
+npm run lint:fix     # eslint --fix
+npm run format       # prettier --write
+npm run test         # vitest run
+npm run test:watch   # vitest
+npm run e2e          # playwright test
+npm run e2e:ui       # playwright test --ui
+```
+
+## 7. CI pipeline (minimum, M0)
+
+1. `npm ci`
+2. `npm run typecheck`
+3. `npm run lint`
+4. `npm run test -- --coverage`
+5. `npm run build`
+6. `npm run e2e` (smoke)
+7. Upload artifacts (bundle stats, coverage, playwright report)
+
+## 8. Dependency hygiene
+
+- **Renovate** or **Dependabot**: weekly PRs.
+- Major bumps on core (React, Vite, react-router, react-query): ADR required.
+- CI `npm audit --omit=dev`; block on `high`/`critical`.

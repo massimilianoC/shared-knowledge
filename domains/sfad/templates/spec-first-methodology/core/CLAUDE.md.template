@@ -1,0 +1,13 @@
+# CLAUDE.md
+
+This file is an **alias** of [`AGENTS.md`](AGENTS.md). Claude (Anthropic) must follow **the entirety** of the rules defined there.
+
+## Claude-specific notes
+
+- Use "extended thinking" for architectural tasks; **not** for micro-edits.
+- For planning, write the plan in the chat; for tasks with 3+ steps, use the task-tracking tool.
+- Prefer batched edit tools for multiple changes to the same file.
+- Before creating a new doc file, read [`docs/INDEX.md`](docs/INDEX.md): update existing documents when possible.
+- Replies to the user: **${PROJECT_LANGUAGE}** (project default). Code and identifiers: English.
+
+Read [`AGENTS.md`](AGENTS.md) now.

@@ -1,25 +1,11 @@
-# Cursor Rules — Shared Knowledge Repository
+# Cursor Rules - Shared Knowledge Repository
 
-This file is a thin alias. The **binding rules** live in [AI_GUIDELINES.md](AI_GUIDELINES.md).
-Cursor must follow the entirety of the rules defined there.
+Read [AI_GUIDELINES.md](AI_GUIDELINES.md) before creating or editing documentation.
 
-## Context
-
-This is a knowledge-management repository for AI agents. It contains skills, agents, patterns, decisions, and domain notes extracted from real projects. It is **not** an application — it is a structured documentation knowledge base organized by **domain-first taxonomy** (`llm/`, `sfad/`, …).
-
-## Cursor-specific notes
-
-- Reply language: match the user (Italian or English). All generated repository content: English.
-- Code, identifiers, file names, commit messages: English.
-- Prefer multi-edit operations when changing multiple sections of the same file.
-- Always read [AI_GUIDELINES.md](AI_GUIDELINES.md) and [MAP.md](MAP.md) before suggesting changes to the catalog.
-- Do not suggest source code — this repository contains Markdown documentation only.
-- Before creating a new file, check for affinity with existing files in the same domain folder.
-- An agent requires ≥ 2 included skills; never create an agent with one skill.
-
-## Read first
-
-1. [AI_GUIDELINES.md](AI_GUIDELINES.md) — master rules.
-2. [CLAUDE.md](CLAUDE.md) — supported commands and processing behavior.
-3. [MAP.md](MAP.md) — current skills/agents/knowledge per domain.
-4. [CONTRIBUTING.md](CONTRIBUTING.md) — contribution workflow for humans and agents.
+- This is a Markdown knowledge repository, not an application codebase.
+- All produced content is English.
+- The reusable unit is `domains/<domain>/`; preserve its internal relative links.
+- Create skills, agents, knowledge, and templates only inside the appropriate domain package.
+- Use the root templates for generic artifacts and package templates for domain adoption.
+- Check affinity before creating files. Consolidate rather than duplicate.
+- Update package README and `MAP.md` with every catalog change.

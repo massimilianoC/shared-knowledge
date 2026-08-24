@@ -1,0 +1,164 @@
+# Security & Auth — ${PROJECT_NAME}
+
+> Stability: **stable**. Changes via ADR.
+
+## 1. Threat model (summary)
+
+| Threat | Mitigation |
+| :--- | :--- |
+| Token theft via XSS | Strict CSP + httpOnly cookies (if edge layer) or in-memory tokens; no long-lived `localStorage` tokens |
+| CSRF | `SameSite=Strict` cookies + double-submit token (when cookie-based) |
+| Privilege escalation | Impossible client-side: authorization is 100% server-side |
+| Data exfiltration | Audit log; no bulk dumps via UI |
+| Replay | Short-lived tokens + refresh + `Idempotency-Key` on mutations |
+| Clickjacking | `frame-ancestors 'none'` |
+| Supply chain | Lockfile committed, CI audit, Renovate/Dependabot, pinned majors |
+
+## 2. Authentication
+
+### 2.1 Standard login flow
+
+1. UI shows login form (email + password [+ MFA TOTP if `mfaRequired`]).
+2. `POST ${LOGIN_ENDPOINT}` → `{ accessToken, refreshToken?, mfaRequired?: true }`.
+3. If `mfaRequired` → OTP form → `POST ${MFA_VERIFY_ENDPOINT}`.
+4. Tokens stored in memory (preferred) or httpOnly cookie via edge.
+5. `GET ${ME_ENDPOINT}` loads profile + permissions into auth store.
+6. Redirect to default landing route (or `returnTo`).
+
+### 2.2 Refresh
+
+- Access-token TTL ≤ 15 min (recommended).
+- A single automatic refresh attempt per 401; failure → hard logout.
+
+### 2.3 Logout
+
+- `POST ${LOGOUT_ENDPOINT}` revokes refresh on the SSoT.
+- Client clears in-memory tokens and invalidates the entire server-state cache.
+
+### 2.4 MFA
+
+- TOTP default, backup codes managed by the SSoT.
+- Enforce for privileged roles starting at the agreed milestone.
+
+## 3. Token storage matrix
+
+| Option | Pros | Cons | When |
+| :--- | :--- | :--- | :--- |
+| httpOnly cookie + CSRF (via edge layer) | XSS-resistant; simple SSR/refresh | Requires edge layer | **Preferred** with edge layer |
+| In-memory token | No edge required; no cookie | Lost on refresh → silent refresh or re-login | When no edge layer |
+| `localStorage` | Persistent | Vulnerable to XSS | **Forbidden** for long-lived tokens |
+| `sessionStorage` | Persistent per-tab | Same XSS surface | **Forbidden** |
+
+Operational decision recorded in an ADR.
+
+## 4. Authorization (RBAC / ABAC)
+
+### 4.1 Model
+
+- `Permission` = string `domain:action[:scope]` (e.g., `device:command:send`).
+- `Role` = bundle of permissions.
+- `RoleAssignment` = `subject ↔ role` with optional scope.
+- The SSoT resolves and returns the effective list via `${ME_ENDPOINT}`.
+
+### 4.2 Client usage
+
+```ts
+// cosmetic hide
+{hasPermission('device:command:send', { scope: `fleet:${fleetId}` }) && <SendCommandButton />}
+
+// route protection
+export const loader = requirePermission('audit:read');
+```
+
+- A `<RequirePermission>` component / equivalent guards conditional rendering.
+- Loader / route guard protects whole pages.
+- **Never** make business decisions based on permissions in the client.
+
+### 4.3 Authorization failures
+
+- 403 → explanatory empty state with `correlationId` and "Request access" CTA.
+- Role changes require a session reload.
+
+## 5. CSRF
+
+- Cookie-based auth → double-submit token in `X-CSRF-Token`.
+- In-memory tokens → server-side `Origin` check; CSRF token not strictly required.
+
+## 6. Content Security Policy (target)
+
+```
+default-src 'self';
+script-src 'self' 'nonce-<NONCE>';
+style-src 'self' 'nonce-<NONCE>';
+img-src 'self' data: blob: https://<asset-domain>;
+connect-src 'self' https://${API_HOST};
+font-src 'self' data:;
+frame-ancestors 'none';
+base-uri 'self';
+form-action 'self';
+upgrade-insecure-requests;
+```
+
+- Nonce injected by the edge layer if present.
+- No `'unsafe-inline'`, no `'unsafe-eval'`.
+
+## 7. Additional security headers
+
+- `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+- `Cross-Origin-Opener-Policy: same-origin`
+
+## 8. Secret handling
+
+- Never commit secrets.
+- `.env.example` documents expected variables; real values via secret manager.
+- API keys / cloud-storage credentials shown **once** at creation, last-four after.
+- Dedicated rotation endpoint, audit-logged.
+
+## 9. Audit for admin actions
+
+Actions requiring **explicit confirmation** (typing the resource name):
+
+- hard delete
+- token rotation / revoke
+- role promotion to highly privileged roles
+- destructive rollout / publish
+- bulk delete above N items
+
+Actions requiring a **mandatory reason** (free text, audited):
+
+- override of derived values
+- hard delete
+- privilege impersonation
+- reversal of automatic classifications
+
+## 10. Dependencies and supply chain
+
+- Lockfile (e.g., `package-lock.json` / `Cargo.lock` / `pnpm-lock.yaml`) committed.
+- CI: audit failing on `high`/`critical`.
+- SRI for any external assets.
+- No third-party scripts from untrusted CDNs.
+
+## 11. Client logging and telemetry
+
+- Shared logger (`<path>/logger.<ext>`); levels `debug | info | warn | error`.
+- In production: only `warn | error` sent to the sink (env-configurable).
+- Never log tokens, sensitive payloads, secret-bearing bodies.
+- Automatic masking of `password`, `token`, `apiKey`, `secret` keys in log payloads.
+
+## 12. Privacy
+
+- No third-party trackers by default.
+- Telemetry opt-in via runtime config.
+- `${SESSIONS_REVOKE_ALL_ENDPOINT}` reachable from the profile page.
+
+## 13. Per-PR security checklist
+
+- [ ] No hard-coded secret
+- [ ] No `dangerouslySetInnerHTML` (or equivalent) without sanitization + comment
+- [ ] No new `eval`, `new Function`, `setTimeout(string)`
+- [ ] No new domain in CSP `connect-src` without ADR
+- [ ] All mutations carry `Idempotency-Key`
+- [ ] All destructive actions confirmed and audited

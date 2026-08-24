@@ -1,0 +1,147 @@
+# Architecture Overview — ${PROJECT_NAME} (Frontend React flavor)
+
+> Stability: **stable**. Technical Single Source of Truth for this repo. Changes via ADR in `decisions/`.
+
+## 1. Positioning
+
+```
++--------------------------------------------------------------+
+|                    END USERS / OTHER FRONTENDS               |
++--------------------+-----------------------------------------+
+                     |  HTTPS (user-facing API)
+                     v
++--------------------------------------------------------------+
+|        ${SSOT_NAME} (separate solution)                       |
+|   **SINGLE SOURCE OF TRUTH** — API-only                       |
+|                                                              |
+|   /api/...   /api/admin   <event broker>   <storage>          |
++--------------------+-----------------------------------------+
+                     |  HTTPS (admin API only)
+                     v
++--------------------------------------------------------------+
+|   ${PROJECT_NAME} (this repo)                                 |
+|   React SPA  +  (optional) Fastify BFF                        |
+|   Audience: ${PRIMARY_AUDIENCE}                              |
++--------------------------------------------------------------+
+                     ^
+                     | desktop browser usage
+                ADMIN OPERATORS
+```
+
+## 2. Responsibilities
+
+### 2.1 ${SSOT_NAME}
+
+Sole authority for: domain data, authentication, RBAC, policies, AI pipelines, ingest, storage, signed URLs, audit, job orchestration, schema versioning, token issuance, report generation.
+
+### 2.2 This repo
+
+Responsibilities = **presentation, UX orchestration, client-side form validation**.
+
+- list/detail/form/dashboard rendering;
+- composing admin API calls (read + mutation);
+- server-state management (cache, invalidation, retry, controlled optimistic update);
+- long-running job visualization (polling/SSE);
+- user-error prevention (confirmations, schema validation, idempotency-key);
+- cosmetic permission projection (hide/disable);
+- accessibility, i18n, dark mode, dense UX.
+
+**Does not** decide domain state. **Does not** duplicate logic. **Does not** bypass ${SSOT_NAME}.
+
+### 2.3 Optional Fastify BFF
+
+Introduced **only if** at least one of:
+
+- httpOnly session cookie + CSRF (alternative to in-memory tokens);
+- proxy with header rewriting for CORS in dev/prod;
+- CSP nonce injection for static HTML;
+- signed uploads (server-side delegation);
+- secret stripping on sensitive endpoints.
+
+The BFF carries **no domain logic**. Thin Fastify edge layer.
+
+## 3. Conceptual model
+
+See [`../analysis/DOMAIN_MODEL.md`](../analysis/DOMAIN_MODEL.md).
+
+## 4. Binding architectural constraints
+
+| # | Constraint | Rationale |
+| :--- | :--- | :--- |
+| A1 | ${SSOT_NAME} is the SSoT | Coherence, security, evolvability |
+| A2 | UI communicates only via HTTPS with ${SSOT_NAME} | No direct DB/broker/storage access |
+| A3 | Single API client, schema-driven (`zod`) | End-to-end typing |
+| A4 | Authorization server-side; UI is cosmetic | Cannot delegate security to client |
+| A5 | Mutations carry `Idempotency-Key` | Safe retries |
+| A6 | Long-running tasks = observable `Job` | Non-blocking UX |
+| A7 | UTC + GeoJSON `[lon, lat]` | Coherence with SSoT and devices |
+| A8 | Audit mandatory for sensitive actions | Compliance |
+| A9 | No secrets in the client | Anti-leak |
+| A10 | Forward-compatible schemas (`X-Schema-Version`) | Decoupled deploys |
+| A11 | Versioned config/policy with rollback | Reversibility |
+| A12 | No raw DDL/queries; maintenance via `Job` | No raw DB access |
+
+## 5. Deploy topology
+
+```
++----------------+      +-------------------+      +------------------+
+| Static hosting | ---> | Fastify BFF (opt) | ---> | ${SSOT_NAME}     |
+| (Nginx / CDN)  |      | CSRF/session/CSP  |      | /api/admin/...   |
+| React SPA      |      |                   |      |                  |
++----------------+      +-------------------+      +------------------+
+```
+
+- **Frontend**: Vite SPA + static assets, served by CDN or reverse proxy.
+- **BFF** (if present): Node.js process, stateless, behind reverse proxy.
+- **Health endpoints**: `/healthz` (liveness), `/readyz` (readiness).
+- **Tracing**: `traceparent` (W3C) propagated browser → BFF → backend.
+
+## 6. Security boundary
+
+- **Authentication**: JWT signed by ${SSOT_NAME}. Recommended storage: httpOnly cookie + CSRF token (preferred) or in-memory token (never `localStorage` long-lived).
+- **Authorization**: server-side → endpoint declares required permissions → 403 `problem+json`. UI reads `GET ${ME_ENDPOINT}` to know what to show.
+- **CSP**: restrictive, `frame-ancestors 'none'`, no inline scripts.
+- **Upload**: signed URLs preferred; UI never writes directly to S3-compat storage.
+- **Download**: media/export via short-lived signed URLs.
+
+Detail in [`SECURITY_AND_AUTH.md`](SECURITY_AND_AUTH.md).
+
+## 7. Client-side data strategy
+
+- **Server state**: `@tanstack/react-query` as the sole truth for remote data on the client.
+- **UI state**: local `useState`/`useReducer`; `zustand` for minimal global state.
+- **Form state**: `react-hook-form` + `zod` resolver.
+- **Cache invalidation**: hierarchical keys per domain (`['devices', filters]`); targeted invalidation after mutate.
+- **Optimistic updates**: allowed only for reversible actions (toggle, tag); never for delete or command.
+
+## 8. Error strategy
+
+- Every non-2xx → structured `ApiError` (`type`, `title`, `status`, `detail`, `correlationId`).
+- UI shows `correlationId` in error toasts.
+- 401 → silent refresh once; if it fails → forced logout.
+- 403 → empty state "Permission denied — contact admin".
+- 409 → conflict banner + suggestion (e.g., updated by another admin).
+- 5xx → generic toast + manual retry + automatic telemetry signal (if configured).
+
+## 9. Evolution strategy
+
+- Every new feature: spec/milestone → `zod` types → hooks/services → components → page → tests → docs.
+- Backend breaking change → coordinated via `X-Schema-Version`; never unilateral.
+- ADRs for every binding choice.
+
+## 10. NOT in this architecture
+
+- No client-side MQTT logic.
+- No browser-side S3 client.
+- No browser-side ML inference (beyond visualizations like bounding box rendering).
+- No alternative data source to ${SSOT_NAME}.
+- No domain-data persistence in the browser beyond react-query cache (memory).
+
+## 11. Related documents
+
+- [`TECH_STACK.md`](TECH_STACK.md)
+- [`INTEGRATION_CONTRACT.md`](INTEGRATION_CONTRACT.md)
+- [`SECURITY_AND_AUTH.md`](SECURITY_AND_AUTH.md)
+- [`../analysis/DOMAIN_MODEL.md`](../analysis/DOMAIN_MODEL.md)
+- [`../ui-ux/INFORMATION_ARCHITECTURE.md`](../ui-ux/INFORMATION_ARCHITECTURE.md)
+- [`../planning/ROADMAP_MILESTONES.md`](../planning/ROADMAP_MILESTONES.md)

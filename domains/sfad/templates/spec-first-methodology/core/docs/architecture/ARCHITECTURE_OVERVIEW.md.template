@@ -1,0 +1,145 @@
+# Architecture Overview — ${PROJECT_NAME}
+
+> Stability: **stable**. This document is the **technical Single Source of Truth** for this repository. Every decision here binds the code. Changes only via ADR in `decisions/`.
+
+## 1. Positioning in the system
+
+```
+<ASCII diagram showing this repo and its neighbours>
+
+  +---------------+        +-------------------+        +----------------+
+  |   Upstream    |  --->  |   ${SSOT_NAME}    |  --->  |   This repo    |
+  |    inputs     |        |       (SSoT)      |        | ${PROJECT_KIND}|
+  +---------------+        +-------------------+        +----------------+
+                                                                  |
+                                                                  v
+                                                          ${PRIMARY_AUDIENCE}
+```
+
+<!--
+Customize the diagram. Show clearly: who is the SSoT, who are upstreams, who are downstreams, what flows through which edge.
+-->
+
+## 2. Roles & responsibilities
+
+### 2.1 ${SSOT_NAME} (NOT in this repo)
+
+It is the **sole authority** for:
+
+- <concern 1 — e.g., domain data model>
+- <concern 2 — e.g., authentication and RBAC>
+- <concern 3 — e.g., policy execution>
+- <concern 4 — e.g., audit log>
+- <concern 5 — e.g., job orchestration>
+- ...
+
+### 2.2 This repository
+
+Responsibilities: **<one-line summary, e.g., "presentation, UX orchestration, client-side form validation">**.
+
+- <thing 1>
+- <thing 2>
+- <thing 3>
+
+**Not** responsible for: deciding domain state, duplicating logic, bypassing the SSoT.
+
+### 2.3 Optional thin edge layer
+
+If the project introduces a BFF / proxy / edge service, justify here:
+
+- <when needed: CSRF, session cookies, CSP nonces, signed uploads, secret stripping>
+- explicit: the edge layer has **no domain logic**.
+
+## 3. Conceptual model (summary)
+
+<!--
+1-paragraph summary. Full conceptual model in ../analysis/DOMAIN_MODEL.md.
+-->
+
+```
+<minimal ASCII or text representation of the core aggregates and cardinality>
+```
+
+Transversal to everything: <list cross-cutting entities: Policy, ConfigEntry, FeatureFlag, Job, AuditLog, ...>.
+
+## 4. Binding architectural constraints
+
+| # | Constraint | Rationale |
+| :--- | :--- | :--- |
+| A1 | ${SSOT_NAME} is the SSoT | Coherence, security, evolvability |
+| A2 | This repo communicates with ${SSOT_NAME} only via the typed boundary client | No raw access |
+| A3 | Schema-driven boundary (one canonical schema language) | End-to-end typing, no drift |
+| A4 | Authorization is server-side; UI is cosmetic | Security cannot be delegated to the client |
+| A5 | All mutations carry `Idempotency-Key` | Safe retries |
+| A6 | Long-running operations are first-class `Job` | Non-blocking UX, audit, retry |
+| A7 | Time in UTC; geo in canonical format | Coherence |
+| A8 | Audit mandatory for sensitive actions | Compliance, debugging |
+| A9 | No secrets in the client | Anti-leak |
+| A10 | Forward-compatible schemas (`X-Schema-Version`) | Decoupled deploys |
+| A11 | Versioned config/policy with rollback | Reversibility |
+| A12 | <project-specific constraint> | <reason> |
+
+<!--
+Numbered constraints are referenced from code reviews ("violates A4") and from ADRs. Keep additions sequential; never renumber.
+-->
+
+## 5. Deploy topology
+
+```
++----------------+      +-------------------+      +------------------+
+| Static hosting | ---> | (Optional) BFF    | ---> | ${SSOT_NAME}     |
+| / CDN          |      |                   |      |                  |
++----------------+      +-------------------+      +------------------+
+```
+
+- **This repo's artifact**: <e.g., SPA build + static assets / container image / library package>
+- **Health endpoints**: `/healthz` (liveness), `/readyz` (readiness). _(Adjust to your platform.)_
+- **Tracing**: propagate `traceparent` (W3C) across the boundary.
+
+## 6. Security boundary
+
+- **AuthN**: <how users/services authenticate>
+- **AuthZ**: server-side, surfaced to UI via a `/me`-like endpoint
+- **CSP**: restrictive; no inline scripts
+- **Uploads**: via signed URLs (preferred) — the UI never writes directly to object storage
+- **Downloads**: via short-lived signed URLs
+
+Detail in [`SECURITY_AND_AUTH.md`](SECURITY_AND_AUTH.md).
+
+## 7. Client-side data strategy
+
+- **Server state**: <canonical server-state library, e.g., react-query / SWR / Apollo>
+- **UI state**: <local hooks / minimal global store>
+- **Form state**: <chosen form library>
+- **Cache invalidation**: hierarchical keys per domain; targeted invalidation after mutate
+- **Optimistic updates**: only for reversible actions (toggle, tag); never for delete or command
+
+## 8. Error strategy
+
+- Every non-2xx response → structured `ApiError` (`type`, `title`, `status`, `detail`, `correlationId`)
+- UI surfaces `correlationId` for support
+- 401 → silent refresh once, then forced logout
+- 403 → empty-state "permission denied"
+- 409 → conflict banner with refresh suggestion
+- 5xx → toast + automatic telemetry signal
+
+## 9. Evolution strategy
+
+- Every new feature follows: spec/milestone → schema → hook/service → component → page → test → docs
+- Breaking changes on the boundary coordinated via `X-Schema-Version`; never unilateral
+- ADRs in `decisions/` for every constraint-bearing decision
+
+## 10. What does NOT live in this architecture
+
+- <no direct DB/queue/storage access>
+- <no client-side ML inference (unless explicit, document)>
+- <no alternative data source — only ${SSOT_NAME}>
+- <no domain-data persistence in the browser beyond ephemeral cache>
+
+## 11. Related documents
+
+- [`TECH_STACK.md`](TECH_STACK.md)
+- [`INTEGRATION_CONTRACT.md`](INTEGRATION_CONTRACT.md)
+- [`SECURITY_AND_AUTH.md`](SECURITY_AND_AUTH.md)
+- [`../analysis/DOMAIN_MODEL.md`](../analysis/DOMAIN_MODEL.md)
+- [`../planning/ROADMAP_MILESTONES.md`](../planning/ROADMAP_MILESTONES.md)

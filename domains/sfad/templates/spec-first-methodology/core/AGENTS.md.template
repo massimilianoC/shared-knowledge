@@ -1,0 +1,145 @@
+# AGENTS.md — Binding rules for agentic development
+
+> This file is the **operational contract** for any AI agent (Claude, Gemini, Copilot, Cursor, Codex, ...) that writes, modifies, or reviews code in this repository.
+>
+> **Before any task**, read, in order:
+>
+> 1. This file (`AGENTS.md`)
+> 2. [`docs/INDEX.md`](docs/INDEX.md)
+> 3. [`docs/architecture/ARCHITECTURE_OVERVIEW.md`](docs/architecture/ARCHITECTURE_OVERVIEW.md) — technical Single Source of Truth
+> 4. The current milestone block in [`docs/planning/ROADMAP_MILESTONES.md`](docs/planning/ROADMAP_MILESTONES.md)
+> 5. Any task brief under `docs/tasks/` (if present)
+
+## 0. Project identity
+
+- **Repo**: `${REPO_SLUG}` — ${PROJECT_KIND}.
+- **Single Source of Truth (SSoT)**: ${SSOT_NAME}. This repo consumes truth from there and never duplicates it.
+- **Audience**: ${PRIMARY_AUDIENCE}.
+- **Non-audience**: ${NON_AUDIENCE}.
+
+## 1. Non-negotiable principles
+
+1. **SSoT external.** This repo does not duplicate domain logic, does not implement "smart" fallbacks, does not compute authorization itself. Anything that decides domain state flows from the SSoT.
+2. **No direct access to underlying data stores, message brokers, object storage, or secrets.** Only through the SSoT's authorized boundary.
+3. **Authorization is server-side; UI is cosmetic.** The SSoT decides. The client hides/disables but never grants.
+4. **Audit is mandatory for sensitive actions.** A feature without audit trail is not a feature.
+5. **Schema-driven, never stringly-typed.** Every payload at a boundary is validated. No `any` at the boundary.
+6. **Idempotent mutations.** Every state-changing call carries an `Idempotency-Key` (UUID v4).
+7. **Long-running work is observable.** Operations that exceed UX-acceptable latency become a first-class `Job`, polled or streamed, never blocking the UI.
+8. **UTC for time, normalized format for geo** (where applicable). Persist in canonical form; render in the user's locale.
+9. **No secrets in the client.** Tokens/keys are reveal-once, then last-four only. Never in `localStorage` or equivalents long-term.
+10. **Forward-compatible schemas.** Every response carries a schema version header; tolerate unknown fields; never fail on additive changes.
+
+## 2. Scope of this repository
+
+**IN scope:**
+
+- ${PROJECT_KIND}-specific code (UI / pages / routes / state / forms / ...).
+- Typed boundary client (HTTP / IPC / SDK wrapper) with schema validation.
+- Tests (unit / integration / E2E) for everything above.
+- Optional thin edge layer (BFF / proxy) for cross-cutting concerns (CSRF, session, CSP).
+
+**OUT of scope:**
+
+- Domain models / migrations / scheduler / workers (live in the SSoT solution).
+- Policy / configuration definitions (live in the SSoT; this repo only edits them via authorized endpoints).
+- Direct database / queue / storage access.
+
+If a task requires changes *outside* this scope, the agent produces a **proposal** in `docs/architecture/proposals/` and stops. It does not simulate the missing piece client-side.
+
+## 3. Agentic workflow (standard)
+
+For any non-trivial task:
+
+1. **Plan** — 3–7 step plan in chat (or in `docs/tasks/<id>.md`) before touching code.
+2. **Read context** — milestone, related schemas, existing components. No duplication.
+3. **Schema first** — when a boundary changes, update validators (and derived types) before call sites.
+4. **Implement** — small files, business logic in hooks/services, no inline boundary calls inside UI components.
+5. **Test** — at least one unit/integration test per new hook/service; smoke E2E for new pages.
+6. **Verify** — `typecheck`, `lint`, `test`, `build` all green.
+7. **Document** — update Execution Spec slice, FR coverage, INDEX, ADR (if architectural). Same PR.
+
+## 4. Code conventions
+
+- **Language / runtime**: see [`docs/architecture/TECH_STACK.md`](docs/architecture/TECH_STACK.md).
+- **Naming**: PascalCase types/components, camelCase functions/variables, SCREAMING_SNAKE_CASE constants, kebab-case route files.
+- **Folder structure**: see Tech Stack — binding.
+- **Soft cap**: ~200 lines per file.
+- **No `console.log` in committed code** (use the shared logger).
+- **No `// @ts-ignore`** (or equivalent) without `// reason:` comment.
+
+## 5. Security baseline
+
+See [`docs/architecture/SECURITY_AND_AUTH.md`](docs/architecture/SECURITY_AND_AUTH.md). Highlights:
+
+- Tokens in memory or httpOnly cookie. Never `localStorage` long-lived.
+- CSRF via double-submit token if cookie-based auth.
+- No `dangerouslySetInnerHTML` (or equivalent) without sanitization + comment.
+- CSP rigorous; no inline scripts.
+- All input validated client-side; the SSoT is still the last authority.
+- Signed URLs for any large file download.
+
+## 6. Interaction with the SSoT
+
+- **One typed client** for the SSoT. No ad-hoc `fetch` / `axios` calls in feature code.
+- Conventions: see [`docs/architecture/INTEGRATION_CONTRACT.md`](docs/architecture/INTEGRATION_CONTRACT.md).
+- Missing endpoint → open issue / proposal. Do not improvise client-side.
+
+## 7. UI/state conventions (if applicable)
+
+- **Server state**: managed via the canonical server-state library (see Tech Stack).
+- **UI state**: local hooks; minimal global store.
+- **Form state**: schema-driven form library; client-side validation mirrors SSoT validation.
+- **Routing**: declarative; permissions checked via a loader / guard component.
+
+## 8. UI/UX rules (if applicable)
+
+See [`docs/ui-ux/DESIGN_PRINCIPLES.md`](docs/ui-ux/DESIGN_PRINCIPLES.md). Highlights:
+
+- Destructive confirmations require typing the resource name.
+- Long-running operations show as `Job` with a link to detail.
+- A11y WCAG 2.1 AA minimum.
+- i18n strings from the dictionary; no concatenation.
+- Dark mode supported from day-1 (if UI project).
+
+## 9. The agent must NEVER
+
+- Create endpoints / migrations / ETL / ingest workers — those live in the SSoT.
+- Bypass the typed boundary client.
+- Reimplement authorization rules client-side beyond cosmetic hide/disable.
+- Add a heavyweight dependency (>100 KB gzipped) without a written ADR justification.
+- Introduce an alternative framework alongside the chosen one without ADR.
+- Insert mock data instead of real endpoints in production code (mocks live only in tests and dev MSW).
+- Create new documentation files unless asked — update existing docs instead.
+- Touch files under `docs/guidelines/` (read-only input from external owners).
+
+## 10. Definition of Done (per PR)
+
+- [ ] `typecheck`, `lint`, `test`, `build` green
+- [ ] New boundary code has schema + at least one test
+- [ ] New user-facing routes have a smoke E2E
+- [ ] Execution Spec slice tracker updated
+- [ ] FR coverage updated in `FUNCTIONAL_REQUIREMENTS.md`
+- [ ] Milestone DoD box ticked if applicable
+- [ ] ADR opened if architectural decision was made
+- [ ] No regression in a11y on touched UI pages
+- [ ] No secrets / hard-coded URLs
+- [ ] Audit / confirmations present for sensitive actions
+
+## 11. Cross-references
+
+- Vision: [`docs/vision/VISION_AND_MISSION.md`](docs/vision/VISION_AND_MISSION.md)
+- Architecture: [`docs/architecture/ARCHITECTURE_OVERVIEW.md`](docs/architecture/ARCHITECTURE_OVERVIEW.md)
+- Tech Stack: [`docs/architecture/TECH_STACK.md`](docs/architecture/TECH_STACK.md)
+- Integration Contract: [`docs/architecture/INTEGRATION_CONTRACT.md`](docs/architecture/INTEGRATION_CONTRACT.md)
+- Security & Auth: [`docs/architecture/SECURITY_AND_AUTH.md`](docs/architecture/SECURITY_AND_AUTH.md)
+- Functional Requirements: [`docs/requirements/FUNCTIONAL_REQUIREMENTS.md`](docs/requirements/FUNCTIONAL_REQUIREMENTS.md)
+- Non-Functional Requirements: [`docs/requirements/NON_FUNCTIONAL_REQUIREMENTS.md`](docs/requirements/NON_FUNCTIONAL_REQUIREMENTS.md)
+- Roadmap: [`docs/planning/ROADMAP_MILESTONES.md`](docs/planning/ROADMAP_MILESTONES.md)
+- Execution Spec: [`docs/planning/EXECUTION_SPEC.md`](docs/planning/EXECUTION_SPEC.md)
+- External Dependency Enablement Spec: [`docs/planning/EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md`](docs/planning/EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md) (if applicable)
+
+## 12. Conventions on language
+
+- Replies from the agent to the user: **${PROJECT_LANGUAGE}** (project default).
+- Code, identifiers, commit messages, file names: **English**.

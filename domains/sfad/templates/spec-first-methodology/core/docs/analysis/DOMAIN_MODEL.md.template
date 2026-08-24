@@ -1,0 +1,89 @@
+# Domain Model — ${PROJECT_NAME}
+
+> Stability: **evolving**. Reflects ${SSOT_NAME}; update when the SSoT evolves.
+>
+> This is **not** a database schema. It is the conceptual map this repo must understand to build coherent UIs/clients. The executable schema lives on the SSoT.
+
+## Related documents
+
+- [`../architecture/ARCHITECTURE_OVERVIEW.md`](../architecture/ARCHITECTURE_OVERVIEW.md)
+- [`../requirements/FUNCTIONAL_REQUIREMENTS.md`](../requirements/FUNCTIONAL_REQUIREMENTS.md)
+
+## 1. Fundamental cardinalities
+
+```
+<ASCII diagram showing the central aggregates and how they relate>
+
+  +---------+  1..*  +---------+   produces  +-----------+
+  | <Root>  |------->| <Child> |------------>| <Output>  |
+  +---------+        +---------+             +-----------+
+       *..*
+  +---------+
+  | <User>  |
+  +---------+
+```
+
+Cross-cutting: `Policy*`, `ConfigEntry`, `FeatureFlag`, `Job`, `AuditLog`, `RoleAssignment`.
+
+## 2. Main aggregates
+
+### 2.1 <Aggregate A>
+
+- Identity: `id`, `<...>`
+- State: `<state machine, e.g., DRAFT → ACTIVE → ARCHIVED>`
+- Relationships: ...
+- Key behaviors: ...
+
+### 2.2 <Aggregate B>
+
+- Identity: ...
+- ...
+
+<!--
+Repeat per aggregate. Keep concise — this doc is conceptual, not implementation.
+-->
+
+## 3. Cross-cutting concepts
+
+### 3.1 Policy
+
+- Definition stored as data, versioned, validated against a JSON schema.
+- Applied by the SSoT, never recomputed in this repo.
+
+### 3.2 Job
+
+- Identity: `jobId`, `kind`, `status` (`queued | running | succeeded | failed | cancelled`).
+- Created by every long-running mutation. Followed via polling or stream.
+
+### 3.3 AuditLog
+
+- Append-only on the SSoT.
+- Surface in admin UI for sensitive actions only.
+
+## 4. Identifiers
+
+- All IDs are server-generated (no client-side UUIDs unless explicitly delegated).
+- Format: <e.g., ULID, KSUID, UUIDv7> — decide and document here.
+
+## 5. Time and units
+
+- Time: UTC ISO 8601 in transit and storage; rendered in user locale.
+- Currency / quantity: <units, precision, rounding rules>.
+- Geo (if applicable): GeoJSON `[lon, lat]`.
+
+## 6. State machines
+
+For each aggregate with non-trivial lifecycle:
+
+```
+<aggregate>:
+  draft --submit--> pending --approve--> active --suspend--> suspended --reactivate--> active
+                                                            --archive--> archived
+```
+
+## 7. Open questions
+
+A short list of conceptual ambiguities still being resolved:
+
+- <question 1>
+- <question 2>

@@ -1,217 +1,174 @@
 # Repository Map
 
-Map of the connections between knowledge files, skills, and agents.
-Update it whenever a file is added or changed.
+Canonical catalog of self-contained domain packages. Copy a package directory intact to preserve its skills, agents, knowledge, templates, and relative links.
 
----
+## Package Index
 
-## Folder taxonomy (domain-first)
-
-```text
-skills/
-  llm/
-    output/         JSON parsing, output repair, sanitization
-    platform/       multi-provider catalog, gateway, cost, credits, context, background tasks
-  sfad/
-    bootstrap/      empty-repo → ready-to-open-M0 (AGENTS.md, vision, architecture, pre-src gate)
-    governance/     stability tagging, ADRs (MADR)
-    execution/      milestone lifecycle, slice tracking, 7-step workflow, PR DoD
-    coordination/   external dependencies / parallel-team contracts
-
-agents/
-  llm/              LLM-platform agents (output processing, multi-provider architect)
-  sfad/             SFAD agents (bootstrap, execution)
-
-knowledge/
-  llm/
-    patterns/  decisions/  domain/
-  sfad/
-    patterns/  decisions/  domain/
-```
-
-A domain folder groups everything (skills, agents, patterns, decisions, domain notes) needed to think about that competence area. Inside a domain, file-type subfolders preserve the original knowledge classification (patterns / decisions / domain), and skills are grouped further by competence class (output, platform, bootstrap, governance, execution, coordination).
-
----
-
-## Index by domain — LLM Engineering
-
-### LLM — Knowledge
-
-| Type | File | Description |
+| Package | Scope | Entry point |
 | --- | --- | --- |
-| Pattern | [LLM_JSON_PARSING_GUIDELINES](knowledge/llm/patterns/LLM_JSON_PARSING_GUIDELINES.md) | Complete guide for parsing JSON from LLMs (stages, known bugs). |
-| Pattern | [LLM_MODEL_DISCOVERY](knowledge/llm/patterns/LLM_MODEL_DISCOVERY.md) | Model discovery / catalog patterns across providers. |
-| Pattern | [MULTIPROVIDER_LLM_ARCHITECTURE](knowledge/llm/patterns/MULTIPROVIDER_LLM_ARCHITECTURE.md) | Architecture of a multi-provider LLM platform. |
-| Decision | [llm-cost-tracking-dual-source](knowledge/llm/decisions/llm-cost-tracking-dual-source.md) | Dual-source cost tracking rationale. |
-| Decision | [llm-dual-source-catalog](knowledge/llm/decisions/llm-dual-source-catalog.md) | Dual-source model catalog rationale. |
-| Decision | [llm-json-score-vs-first-match](knowledge/llm/decisions/llm-json-score-vs-first-match.md) | Score-based selection vs first-successful-parse. |
-| Decision | [llm-platform-antiregression](knowledge/llm/decisions/llm-platform-antiregression.md) | Anti-regression strategy for the LLM platform. |
-| Domain | [llm-platform-data-model](knowledge/llm/domain/llm-platform-data-model.md) | Data model for the multi-provider LLM platform. |
+| `capture/` | 2 skills, 1 agents, 6 knowledge files | [capture/ README](domains/capture/README.md) |
+| `llm/` | 9 skills, 2 agents, 11 knowledge files | [llm/ README](domains/llm/README.md) |
+| `rag/` | 2 skills, 1 agents, 6 knowledge files | [rag/ README](domains/rag/README.md) |
+| `sfad/` | 15 skills, 2 agents, 19 knowledge files | [sfad/ README](domains/sfad/README.md) |
 
-### LLM — Skills (class: output)
+## Package: `capture/`
 
-| File | Purpose |
-| --- | --- |
-| [llm-json-parsing](skills/llm/output/llm-json-parsing.md) | 5-stage pipeline: cleanup → candidates → repair → scoring → normalization. |
-| [llm-output-repair](skills/llm/output/llm-output-repair.md) | Reusable state machine + individual repair functions. |
+Entry point: [domains/capture/README.md](domains/capture/README.md)
 
-### LLM — Skills (class: platform)
+### Skills
 
-| File | Purpose |
-| --- | --- |
-| [multiprovider-llm-catalog](skills/llm/platform/multiprovider-llm-catalog.md) | Manage a multi-provider model catalog. |
-| [llm-gateway-router](skills/llm/platform/llm-gateway-router.md) | Provider routing / fallback at the gateway. |
-| [llm-cost-tracking](skills/llm/platform/llm-cost-tracking.md) | Usage and cost accounting. |
-| [llm-credit-engine](skills/llm/platform/llm-credit-engine.md) | Credits / quota engine. |
-| [llm-context-budget](skills/llm/platform/llm-context-budget.md) | Context window budgeting. |
-| [llm-background-tasks](skills/llm/platform/llm-background-tasks.md) | Background / long-running LLM tasks. |
-
-### LLM — Agents
-
-| File | Included skills | Purpose |
+| Class | File | Purpose |
 | --- | --- | --- |
-| [llm-output-processor](agents/llm/llm-output-processor.md) | llm-json-parsing, llm-output-repair | Orchestrates JSON parsing + repair with model-specific behavior. |
-| [multiprovider-llm-architect](agents/llm/multiprovider-llm-architect.md) | catalog, gateway, cost, credits, context, background | Designs and operates a multi-provider LLM platform. |
+| `general` | [html-artifact-capture-bootstrap](domains/capture/skills/html-artifact-capture-bootstrap.md) | Skill: HTML Artifact Screenshot/PDF Capture Bootstrap |
+| `general` | [pdf-pagination-heuristic](domains/capture/skills/pdf-pagination-heuristic.md) | Skill: PDF Pagination Heuristic for Content Without Print CSS |
 
----
+### Agents
 
-## Index by domain — Spec-First Agentic Development (SFAD)
+| File | Role |
+| --- | --- |
+| [html-artifact-capture-porter](domains/capture/agents/html-artifact-capture-porter.md) | Agent: HTML Artifact Capture Porter |
 
-### SFAD — Knowledge
+### Knowledge
 
-| Type | File | Description |
+| Type | File | Topic |
 | --- | --- | --- |
-| Domain | [sfad-methodology](knowledge/sfad/domain/sfad-methodology.md) | SFAD overview, origin (Beehouse), canonical artifacts, calibration knobs. |
-| Pattern | [SPEC_FIRST_AGENTIC_DEVELOPMENT](knowledge/sfad/patterns/SPEC_FIRST_AGENTIC_DEVELOPMENT.md) | Meta-pattern: 5 pillars, 12 non-negotiables, document stack. |
-| Pattern | [AGENT_CONTRACT_FILE](knowledge/sfad/patterns/AGENT_CONTRACT_FILE.md) | Single AGENTS.md + thin assistant aliases. |
-| Pattern | [STABILITY_LAYERS](knowledge/sfad/patterns/STABILITY_LAYERS.md) | `stable` / `evolving` / `draft` tagging + promotion rules. |
-| Pattern | [SSOT_AND_BOUNDARY](knowledge/sfad/patterns/SSOT_AND_BOUNDARY.md) | Naming SSoT per concern; boundary patterns A/B/C. |
-| Pattern | [VERTICAL_MICRO_SLICES](knowledge/sfad/patterns/VERTICAL_MICRO_SLICES.md) | Slice state machine + 3 gates + tracker tables. |
-| Pattern | [DOC_DRIVEN_AGENTIC_WORKFLOW](knowledge/sfad/patterns/DOC_DRIVEN_AGENTIC_WORKFLOW.md) | 7-step task loop (Plan → Read → Schema → Implement → Test → Verify → Document). |
-| Decision | [agents-md-single-contract](knowledge/sfad/decisions/agents-md-single-contract.md) | Why one AGENTS.md beats per-assistant files. |
-| Decision | [pre-src-gate](knowledge/sfad/decisions/pre-src-gate.md) | Why no `src/` until the Pre-`src/` Checklist is green. |
-| Decision | [madr-adr-format](knowledge/sfad/decisions/madr-adr-format.md) | Why MADR-style ADRs under `docs/architecture/decisions/`. |
+| pattern | [HEADLESS_CHROMIUM_CAPTURE_PIPELINE](domains/capture/knowledge/patterns/HEADLESS_CHROMIUM_CAPTURE_PIPELINE.md) | Pattern: Headless Chromium Capture Pipeline (Screenshot + PDF) |
+| pattern | [PDF_PAGINATION_HEURISTIC](domains/capture/knowledge/patterns/PDF_PAGINATION_HEURISTIC.md) | Pattern: Content-Agnostic PDF Pagination Heuristic |
+| decision | [headless-chromium-vs-client-side-rendering](domains/capture/knowledge/decisions/headless-chromium-vs-client-side-rendering.md) | Decision: Headless Chromium (Puppeteer) over client-side canvas rendering |
+| decision | [one-browser-per-capture-call](domains/capture/knowledge/decisions/one-browser-per-capture-call.md) | Decision: One browser launch per capture call, not a shared pool |
+| decision | [os-installed-chromium-over-bundled-download](domains/capture/knowledge/decisions/os-installed-chromium-over-bundled-download.md) | Decision: OS-installed Chromium package over Puppeteer's bundled download |
+| domain | [capture-service-storage-and-security-model](domains/capture/knowledge/domain/capture-service-storage-and-security-model.md) | Domain: Capture Service — Storage and Security Model |
 
-### SFAD — Skills (class: bootstrap)
+## Package: `llm/`
 
-| File | Purpose |
-| --- | --- |
-| [spec-first-bootstrap](skills/sfad/bootstrap/spec-first-bootstrap.md) | Empty repo → ready-to-open-M0 (full SFAD bootstrap). |
-| [agents-md-author](skills/sfad/bootstrap/agents-md-author.md) | Author the binding AGENTS.md + thin assistant aliases. |
-| [pre-src-checklist-runner](skills/sfad/bootstrap/pre-src-checklist-runner.md) | Verify the Pre-`src/` gate is green. |
+Entry point: [domains/llm/README.md](domains/llm/README.md)
 
-### SFAD — Skills (class: governance)
+### Skills
 
-| File | Purpose |
-| --- | --- |
-| [stability-classifier](skills/sfad/governance/stability-classifier.md) | Apply and audit `Stability:` tags; manage promotion/demotion. |
-| [adr-writer](skills/sfad/governance/adr-writer.md) | Author MADR-style ADRs with coherence checks. |
-
-### SFAD — Skills (class: execution)
-
-| File | Purpose |
-| --- | --- |
-| [milestone-lifecycle](skills/sfad/execution/milestone-lifecycle.md) | Open / execute / close a milestone with checklists. |
-| [microslice-tracker](skills/sfad/execution/microslice-tracker.md) | Manage micro-slice states + tracker tables. |
-| [doc-driven-task-workflow](skills/sfad/execution/doc-driven-task-workflow.md) | Run the 7-step loop per task. |
-| [pr-dod-enforcer](skills/sfad/execution/pr-dod-enforcer.md) | Generate compliant PR descriptions + verify Definition of Done. |
-
-### SFAD — Skills (class: coordination)
-
-| File | Purpose |
-| --- | --- |
-| [external-dependency-enablement](skills/sfad/coordination/external-dependency-enablement.md) | Co-own the Enablement Spec with the upstream owner. |
-
-### SFAD — Agents
-
-| File | Included skills | Purpose |
+| Class | File | Purpose |
 | --- | --- | --- |
-| [sfad-bootstrap-agent](agents/sfad/sfad-bootstrap-agent.md) | spec-first-bootstrap, agents-md-author, stability-classifier, adr-writer, pre-src-checklist-runner, external-dependency-enablement | Drives new-project / retrofit bootstrap. |
-| [sfad-execution-agent](agents/sfad/sfad-execution-agent.md) | milestone-lifecycle, microslice-tracker, doc-driven-task-workflow, pr-dod-enforcer, adr-writer, external-dependency-enablement, stability-classifier | Drives ongoing milestone/slice/PR execution. |
+| `output` | [llm-json-parsing](domains/llm/skills/output/llm-json-parsing.md) | Skill: LLM JSON Parsing (Robust) |
+| `output` | [llm-mermaid-diagram-rendering](domains/llm/skills/output/llm-mermaid-diagram-rendering.md) | Skill: LLM-Generated Mermaid Diagram Rendering |
+| `output` | [llm-output-repair](domains/llm/skills/output/llm-output-repair.md) | Skill: LLM Output Repair (State Machine) |
+| `platform` | [llm-background-tasks](domains/llm/skills/platform/llm-background-tasks.md) | Skill: LLM Background Tasks and Image Generation |
+| `platform` | [llm-context-budget](domains/llm/skills/platform/llm-context-budget.md) | Skill: LLM Context Budget Management |
+| `platform` | [llm-cost-tracking](domains/llm/skills/platform/llm-cost-tracking.md) | Skill: LLM Cost Tracking |
+| `platform` | [llm-credit-engine](domains/llm/skills/platform/llm-credit-engine.md) | Skill: LLM Credit Engine (Abstract Credits) |
+| `platform` | [llm-gateway-router](domains/llm/skills/platform/llm-gateway-router.md) | Skill: LLM Gateway Router |
+| `platform` | [multiprovider-llm-catalog](domains/llm/skills/platform/multiprovider-llm-catalog.md) | Skill: Multi-Provider LLM Catalog |
 
----
+### Agents
 
-## Dependency graph — LLM Engineering
-
-```text
-knowledge/llm/patterns/LLM_JSON_PARSING_GUIDELINES.md
-    │
-    ├──► skills/llm/output/llm-output-repair.md
-    │        └──► agents/llm/llm-output-processor.md
-    │
-    ├──► skills/llm/output/llm-json-parsing.md
-    │        └──► agents/llm/llm-output-processor.md
-    │
-    └──► knowledge/llm/decisions/llm-json-score-vs-first-match.md
-             └──► agents/llm/llm-output-processor.md
-```
-
----
-
-## Dependency graph — SFAD
-
-```text
-knowledge/sfad/domain/sfad-methodology.md
-    │
-    ├──► knowledge/sfad/patterns/SPEC_FIRST_AGENTIC_DEVELOPMENT.md
-    │        ├──► skills/sfad/bootstrap/spec-first-bootstrap.md
-    │        ├──► skills/sfad/bootstrap/pre-src-checklist-runner.md
-    │        └──► skills/sfad/execution/doc-driven-task-workflow.md
-    │
-    ├──► knowledge/sfad/patterns/AGENT_CONTRACT_FILE.md
-    │        └──► skills/sfad/bootstrap/agents-md-author.md
-    │
-    ├──► knowledge/sfad/patterns/STABILITY_LAYERS.md
-    │        └──► skills/sfad/governance/stability-classifier.md
-    │
-    ├──► knowledge/sfad/patterns/SSOT_AND_BOUNDARY.md
-    │        └──► skills/sfad/coordination/external-dependency-enablement.md
-    │
-    ├──► knowledge/sfad/patterns/VERTICAL_MICRO_SLICES.md
-    │        ├──► skills/sfad/execution/microslice-tracker.md
-    │        └──► skills/sfad/execution/milestone-lifecycle.md
-    │
-    ├──► knowledge/sfad/patterns/DOC_DRIVEN_AGENTIC_WORKFLOW.md
-    │        └──► skills/sfad/execution/pr-dod-enforcer.md
-    │
-    ├──► knowledge/sfad/decisions/agents-md-single-contract.md
-    ├──► knowledge/sfad/decisions/pre-src-gate.md
-    └──► knowledge/sfad/decisions/madr-adr-format.md
-             └──► skills/sfad/governance/adr-writer.md
-
-All SFAD skills above are wired into one of:
-- agents/sfad/sfad-bootstrap-agent.md
-- agents/sfad/sfad-execution-agent.md
-```
-
----
-
-## How to update this map
-
-When you add a new file to the repository:
-
-1. Place the file in the right domain folder (`llm/` or `sfad/`, or create a new domain).
-2. Within the domain, choose the right subfolder:
-   - `skills/<domain>/<class>/` — pick or create the competence class (output, platform, bootstrap, governance, execution, coordination, ...).
-   - `knowledge/<domain>/patterns|decisions|domain/` — preserve the original knowledge classification.
-   - `agents/<domain>/` — agents live at the domain root.
-3. Add a row to the relevant table under "Index by domain".
-4. Update the dependency graph if the file creates new links.
-5. Run a link check (every relative link must resolve).
-
----
-
-## Cross-domain affinity ideas
-
-| New knowledge about... | Possible affinity with... |
+| File | Role |
 | --- | --- |
-| Other LLM parsing patterns (not JSON) | `llm/output/` → extend llm-json-parsing or create llm-text-parsing |
-| Retry / fallback on LLM errors | `llm/platform/` → add llm-retry-strategy |
-| Output schema validation | `llm/output/` → stage 6 validation phase |
-| LLM response caching | New class under `llm/` (e.g., `llm/infra/`) |
-| Prompt engineering | New class under `llm/` (e.g., `llm/prompting/`) or new domain `prompting/` |
-| Retrospective patterns / milestone close anti-patterns | `sfad/execution/` → expand retro patterns |
-| Stack-specific SFAD flavors (mobile, CLI, library) | `sfad/bootstrap/` → flavor catalog |
-| ADR coherence checking across `decisions/` | `sfad/governance/` → extend adr-writer with coherence-audit |
-| Cross-team release coordination | `sfad/coordination/` → add release-train-coordination |
-| New domain altogether (e.g., security review, data pipelines) | Create `skills/<new-domain>/`, `agents/<new-domain>/`, `knowledge/<new-domain>/` |
+| [llm-output-processor](domains/llm/agents/llm-output-processor.md) | Agent: LLM Output Processor |
+| [multiprovider-llm-architect](domains/llm/agents/multiprovider-llm-architect.md) | Agent: Multi-Provider LLM Architect |
+
+### Knowledge
+
+| Type | File | Topic |
+| --- | --- | --- |
+| pattern | [LLM_GENERATED_DIAGRAM_RENDERING](domains/llm/knowledge/patterns/LLM_GENERATED_DIAGRAM_RENDERING.md) | LLM-Generated Diagram Rendering — Guidelines and Techniques |
+| pattern | [LLM_JSON_PARSING_GUIDELINES](domains/llm/knowledge/patterns/LLM_JSON_PARSING_GUIDELINES.md) | LLM JSON Parsing — Guidelines and Techniques |
+| pattern | [LLM_MODEL_DISCOVERY](domains/llm/knowledge/patterns/LLM_MODEL_DISCOVERY.md) | Pattern: LLM Model Discovery (Bootstrap + On-Demand) |
+| pattern | [MULTIPROVIDER_LLM_ARCHITECTURE](domains/llm/knowledge/patterns/MULTIPROVIDER_LLM_ARCHITECTURE.md) | Pattern: Multi-Provider LLM Architecture |
+| decision | [llm-cost-tracking-dual-source](domains/llm/knowledge/decisions/llm-cost-tracking-dual-source.md) | Decision: Dual-source cost tracking — provider-reported vs flat-rate |
+| decision | [llm-dual-source-catalog](domains/llm/knowledge/decisions/llm-dual-source-catalog.md) | Decision: Dual-source catalog — env vs MongoDB |
+| decision | [llm-json-score-vs-first-match](domains/llm/knowledge/decisions/llm-json-score-vs-first-match.md) | Decision: Score-based selection vs first-match in LLM repair flows |
+| decision | [llm-platform-antiregression](domains/llm/knowledge/decisions/llm-platform-antiregression.md) | Decision: LLM Gateway Platform — Anti-regression Rules |
+| decision | [render-into-scratch-node-not-framework-dom](domains/llm/knowledge/decisions/render-into-scratch-node-not-framework-dom.md) | Decision: Render into a detached scratch node, then inject the serialized string |
+| decision | [reset-fallback-state-per-streaming-attempt](domains/llm/knowledge/decisions/reset-fallback-state-per-streaming-attempt.md) | Decision: Reset transient fallback state on every attempt, not just on success |
+| domain | [llm-platform-data-model](domains/llm/knowledge/domain/llm-platform-data-model.md) | Domain: LLM Gateway Platform — Data Model |
+
+## Package: `rag/`
+
+Entry point: [domains/rag/README.md](domains/rag/README.md)
+
+### Skills
+
+| Class | File | Purpose |
+| --- | --- | --- |
+| `general` | [rag-multitenancy-leakage-audit](domains/rag/skills/rag-multitenancy-leakage-audit.md) | Skill: RAG Multi-Tenancy Leakage Audit |
+| `general` | [rag-weaviate-double-sandbox-bootstrap](domains/rag/skills/rag-weaviate-double-sandbox-bootstrap.md) | Skill: RAG Weaviate Double-Sandbox Bootstrap |
+
+### Agents
+
+| File | Role |
+| --- | --- |
+| [rag-bootstrap-architect](domains/rag/agents/rag-bootstrap-architect.md) | Agent: RAG Bootstrap Architect |
+
+### Knowledge
+
+| Type | File | Topic |
+| --- | --- | --- |
+| pattern | [DOUBLE_SANDBOXING](domains/rag/knowledge/patterns/DOUBLE_SANDBOXING.md) | Pattern: Double Sandboxing (Two Independent Isolation Layers) |
+| pattern | [MULTITENANT_RAG_ARCHITECTURE](domains/rag/knowledge/patterns/MULTITENANT_RAG_ARCHITECTURE.md) | Pattern: Multi-Tenant RAG Service Architecture |
+| decision | [anti-leakage-test-suite-as-gate](domains/rag/knowledge/decisions/anti-leakage-test-suite-as-gate.md) | Decision: Anti-leakage E2E suite is a mandatory merge gate |
+| decision | [self-provided-embeddings](domains/rag/knowledge/decisions/self-provided-embeddings.md) | Decision: Self-provided embeddings, not server-side vectorization |
+| decision | [weaviate-native-multitenancy-vs-qdrant](domains/rag/knowledge/decisions/weaviate-native-multitenancy-vs-qdrant.md) | Decision: Weaviate native multi-tenancy over Qdrant payload-partitioning |
+| domain | [rag-tenant-scope-data-model](domains/rag/knowledge/domain/rag-tenant-scope-data-model.md) | Domain: Multi-Tenant RAG — Token Claims and Chunk Data Model |
+
+## Package: `sfad/`
+
+Entry point: [domains/sfad/README.md](domains/sfad/README.md)
+
+### Skills
+
+| Class | File | Purpose |
+| --- | --- | --- |
+| `bootstrap` | [agents-md-author](domains/sfad/skills/bootstrap/agents-md-author.md) | Skill: Author a Binding AGENTS.md (Single Agent Contract) |
+| `bootstrap` | [pre-src-checklist-runner](domains/sfad/skills/bootstrap/pre-src-checklist-runner.md) | Skill: Pre-src/ Checklist Runner |
+| `bootstrap` | [spec-first-bootstrap](domains/sfad/skills/bootstrap/spec-first-bootstrap.md) | Skill: Spec-First Project Bootstrap (SFAD) |
+| `coordination` | [external-dependency-enablement](domains/sfad/skills/coordination/external-dependency-enablement.md) | Skill: External Dependency Enablement |
+| `execution` | [doc-driven-task-workflow](domains/sfad/skills/execution/doc-driven-task-workflow.md) | Skill: Doc-Driven Task Workflow (7-Step Loop) |
+| `execution` | [microslice-tracker](domains/sfad/skills/execution/microslice-tracker.md) | Skill: Micro-Slice Tracker |
+| `execution` | [milestone-lifecycle](domains/sfad/skills/execution/milestone-lifecycle.md) | Skill: Milestone Lifecycle (Open / Execute / Close) |
+| `execution` | [pr-dod-enforcer](domains/sfad/skills/execution/pr-dod-enforcer.md) | Skill: Pull Request & Definition-of-Done Enforcer |
+| `execution` | [requirements-to-acceptance-traceability](domains/sfad/skills/execution/requirements-to-acceptance-traceability.md) | Skill: Requirements-to-Acceptance Traceability |
+| `execution` | [risk-based-verification-gauntlet](domains/sfad/skills/execution/risk-based-verification-gauntlet.md) | Skill: Risk-Based Verification Gauntlet |
+| `execution` | [session-handoff-and-recovery](domains/sfad/skills/execution/session-handoff-and-recovery.md) | Skill: Session Handoff and Recovery |
+| `governance` | [adr-writer](domains/sfad/skills/governance/adr-writer.md) | Skill: ADR Writer (MADR Format) |
+| `governance` | [agent-context-architecture](domains/sfad/skills/governance/agent-context-architecture.md) | Skill: Agent Context Architecture |
+| `governance` | [human-decision-gates](domains/sfad/skills/governance/human-decision-gates.md) | Skill: Human Decision Gates |
+| `governance` | [stability-classifier](domains/sfad/skills/governance/stability-classifier.md) | Skill: Stability Classifier and Tagger |
+
+### Agents
+
+| File | Role |
+| --- | --- |
+| [sfad-bootstrap-agent](domains/sfad/agents/sfad-bootstrap-agent.md) | Agent: SFAD Project Bootstrap Agent |
+| [sfad-execution-agent](domains/sfad/agents/sfad-execution-agent.md) | Agent: SFAD Execution Agent |
+
+### Knowledge
+
+| Type | File | Topic |
+| --- | --- | --- |
+| pattern | [AGENT_CONTRACT_FILE](domains/sfad/knowledge/patterns/AGENT_CONTRACT_FILE.md) | Pattern: AGENTS.md as Single Agent Contract |
+| pattern | [CONTRACT_TO_ACCEPTANCE_TRACEABILITY](domains/sfad/knowledge/patterns/CONTRACT_TO_ACCEPTANCE_TRACEABILITY.md) | Pattern: Contract-to-Acceptance Traceability |
+| pattern | [DOC_DRIVEN_AGENTIC_WORKFLOW](domains/sfad/knowledge/patterns/DOC_DRIVEN_AGENTIC_WORKFLOW.md) | Pattern: Doc-Driven Agentic Workflow (7 Steps per Task) |
+| pattern | [DURABLE_EXECUTION_MEMORY](domains/sfad/knowledge/patterns/DURABLE_EXECUTION_MEMORY.md) | Pattern: Durable Execution Memory |
+| pattern | [RISK_BASED_VERIFICATION_GAUNTLET](domains/sfad/knowledge/patterns/RISK_BASED_VERIFICATION_GAUNTLET.md) | Pattern: Risk-Based Verification Gauntlet |
+| pattern | [SPEC_FIRST_AGENTIC_DEVELOPMENT](domains/sfad/knowledge/patterns/SPEC_FIRST_AGENTIC_DEVELOPMENT.md) | Pattern: Spec-First Agentic Development (SFAD) |
+| pattern | [SSOT_AND_BOUNDARY](domains/sfad/knowledge/patterns/SSOT_AND_BOUNDARY.md) | Pattern: Single Source of Truth and Boundary Discipline |
+| pattern | [STABILITY_LAYERS](domains/sfad/knowledge/patterns/STABILITY_LAYERS.md) | Pattern: Stability Layers for Documentation |
+| pattern | [THREE_LAYER_AGENT_CONTEXT](domains/sfad/knowledge/patterns/THREE_LAYER_AGENT_CONTEXT.md) | Pattern: Three-Layer Agent Context |
+| pattern | [VERTICAL_MICRO_SLICES](domains/sfad/knowledge/patterns/VERTICAL_MICRO_SLICES.md) | Pattern: Vertical Micro-Slices with Explicit States |
+| decision | [agents-md-single-contract](domains/sfad/knowledge/decisions/agents-md-single-contract.md) | Decision: One AGENTS.md, Many Thin Aliases (not one file per assistant) |
+| decision | [human-approval-by-decision-risk](domains/sfad/knowledge/decisions/human-approval-by-decision-risk.md) | Decision: Ask for Human Approval by Decision Risk |
+| decision | [madr-adr-format](domains/sfad/knowledge/decisions/madr-adr-format.md) | Decision: Use MADR-Style ADRs Under docs/architecture/decisions/ |
+| decision | [pre-src-gate](domains/sfad/knowledge/decisions/pre-src-gate.md) | Decision: No src/ Until the Pre-src/ Checklist Is Green |
+| decision | [risk-based-quality-gates](domains/sfad/knowledge/decisions/risk-based-quality-gates.md) | Decision: Apply Quality Gates by Change Risk, Not a Universal Tool Threshold |
+| decision | [tool-neutral-agent-contract-with-adapters](domains/sfad/knowledge/decisions/tool-neutral-agent-contract-with-adapters.md) | Decision: Keep One Tool-Neutral Agent Contract and Use Tool Adapters |
+| domain | [agentic-development-evidence-review](domains/sfad/knowledge/domain/agentic-development-evidence-review.md) | Agentic Development Evidence Review |
+| domain | [sfad-methodology](domains/sfad/knowledge/domain/sfad-methodology.md) | Domain: Spec-First Agentic Development (SFAD) |
+| domain | [sfad-next-adoption-guide](domains/sfad/knowledge/domain/sfad-next-adoption-guide.md) | SFAD Next Adoption Guide |
+
+### Templates
+
+Package-specific template assets: [domains/sfad/templates](domains/sfad/templates/) (52 files/directories).
+
+## Maintenance
+
+1. Keep this map and each package README current when an artifact moves or is added.
+2. Validate all local links after reorganizing a package.
+3. Do not list raw inbox material as a package artifact.

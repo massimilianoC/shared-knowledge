@@ -1,0 +1,88 @@
+# Tech Stack — ${PROJECT_NAME}
+
+> Stability: **stable**. Changes via ADR in `decisions/`.
+
+## 1. Official stack
+
+| Area | Choice | Min version | Notes |
+| :--- | :--- | :--- | :--- |
+| Language | ${LANGUAGE} | ${LANGUAGE_MIN_VERSION} | <strictness flags> |
+| Runtime | ${RUNTIME} | ${RUNTIME_MIN_VERSION} | |
+| Build / bundler | ${BUILD_TOOL} | ... | |
+| Test (unit) | ${UNIT_TEST_TOOL} | ... | |
+| Test (E2E) | ${E2E_TEST_TOOL} | ... | |
+| Lint | ${LINT_TOOL} | ... | |
+| Format | ${FORMAT_TOOL} | ... | |
+| Schema validation | ${SCHEMA_TOOL} | ... | Boundary + form |
+| Server state | ${SERVER_STATE_TOOL} | ... | (if UI project) |
+| UI framework | ${UI_FRAMEWORK} | ... | (if UI project) |
+| ... | ... | ... | |
+
+## 2. Forbidden dependencies (without ADR)
+
+- <library A> — reason
+- <library B> — reason
+- libraries with non-OSS-friendly licenses for internal use
+
+## 3. Budgets and thresholds
+
+- **Initial bundle**: < ${BUNDLE_LIMIT} (if UI)
+- **New dependency size cap**: < ${DEP_SIZE_LIMIT} gzipped, otherwise ADR required
+- **Performance targets**: see [`../requirements/NON_FUNCTIONAL_REQUIREMENTS.md`](../requirements/NON_FUNCTIONAL_REQUIREMENTS.md)
+
+## 4. Folder structure (binding)
+
+```
+.
+├── src/                   # main code
+│   ├── ...
+├── tests/                 # tests not co-located with code
+├── docs/                  # see INDEX
+├── <runtime-config>
+└── <language-specific manifest>
+```
+
+<!--
+Customize. Examples for common stacks below — pick or replace.
+-->
+
+## 5. Import / module conventions
+
+- Import alias: `${IMPORT_ALIAS}/...`
+- No deep relative imports (`../../../`)
+- One feature module does **not** import another feature's internals — public surface only
+
+## 6. Scripts (canonical)
+
+```
+${SCRIPT_DEV}      # dev server
+${SCRIPT_BUILD}    # production build
+${SCRIPT_TEST}     # tests
+${SCRIPT_LINT}     # lint
+${SCRIPT_TYPECHECK}# type checks (if applicable)
+${SCRIPT_E2E}      # E2E tests
+```
+
+## 7. CI pipeline (minimum, from M0)
+
+1. install dependencies
+2. typecheck (if applicable)
+3. lint
+4. test with coverage
+5. build
+6. E2E smoke
+7. upload artifacts (bundle stats, coverage, test report)
+
+## 8. Dependency hygiene
+
+- **Renovate** or **Dependabot**: weekly PRs.
+- Major bumps on core stack: ADR required.
+- Security audit on CI; block on `high` / `critical`.
+- Lockfile committed.
+
+## 9. Forbidden patterns
+
+- `console.log` (use the shared logger).
+- `// @ts-ignore` (or equivalent) without `// reason:` comment.
+- Disabling lint rules without `// reason:` comment.
+- Hand-typed structures that duplicate a schema.

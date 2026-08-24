@@ -1,0 +1,102 @@
+# Non-Functional Requirements — ${PROJECT_NAME}
+
+> Stability: **stable**. Targets to uphold across all milestones.
+
+## NFR.1 Performance
+
+| Id | Metric | Target | Notes |
+| :--- | :--- | :--- | :--- |
+| NFR.1.1 | <e.g., LCP on landing page> | < 2.5s | <network profile> |
+| NFR.1.2 | <e.g., INP> | < 200ms p75 | typical interactions |
+| NFR.1.3 | Initial bundle (if UI) | < 250 KB gzipped | route splitting required |
+| NFR.1.4 | <e.g., API p95 latency> | < ... | |
+
+## NFR.2 Reliability
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.2.1 | Controlled retry on `5xx`/`429` with exponential backoff, max 3 |
+| NFR.2.2 | No double execution of mutations (`Idempotency-Key`) |
+| NFR.2.3 | App state recoverable after page refresh |
+| NFR.2.4 | Conflicts (HTTP 409) surfaced with refresh suggestion |
+
+## NFR.3 Security
+
+See [`../architecture/SECURITY_AND_AUTH.md`](../architecture/SECURITY_AND_AUTH.md). Binding requirements:
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.3.1 | Strict CSP without `'unsafe-inline'`/`'unsafe-eval'` |
+| NFR.3.2 | Full security headers (HSTS, X-CTO, Referrer-Policy, Permissions-Policy) |
+| NFR.3.3 | No secrets/tokens in `localStorage` long-lived |
+| NFR.3.4 | Sanitization of any user-generated HTML rendered |
+| NFR.3.5 | Dependency audit on CI; block on `high`/`critical` |
+| NFR.3.6 | Login rate-limited; UI shows consistent message |
+
+## NFR.4 Accessibility (if UI)
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.4.1 | WCAG 2.1 AA on core pages |
+| NFR.4.2 | AAA contrast for body text in dark mode |
+| NFR.4.3 | All interactions completable from keyboard |
+| NFR.4.4 | Correct ARIA on custom components |
+| NFR.4.5 | Focus always visible |
+| NFR.4.6 | Automated a11y test in CI |
+
+## NFR.5 Observability
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.5.1 | Shared logger with levels |
+| NFR.5.2 | W3C `traceparent` propagation across boundary |
+| NFR.5.3 | Production telemetry sink configurable via env |
+| NFR.5.4 | `correlationId` displayed in user-facing error toasts |
+| NFR.5.5 | Build/bundle stats archived in CI artifacts |
+
+## NFR.6 Internationalization
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.6.1 | i18n with hierarchical keys `domain.action.target` |
+| NFR.6.2 | Dates/numbers/currencies via the canonical locale API |
+| NFR.6.3 | User locale persisted on the SSoT |
+| NFR.6.4 | Default `${PROJECT_DEFAULT_LOCALE}`, fallback `${PROJECT_FALLBACK_LOCALE}` |
+| NFR.6.5 | Pseudo-locale available for CI smoke |
+
+## NFR.7 Maintainability
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.7.1 | Strict typing; zero `any` at boundaries |
+| NFR.7.2 | Coverage minimum ${COVERAGE_TARGET}% on boundary code and shared utilities |
+| NFR.7.3 | Files < 200 lines (soft cap); refactor when exceeded |
+| NFR.7.4 | ADR for every significant architectural choice |
+| NFR.7.5 | Import alias convention enforced |
+| NFR.7.6 | Conventional Commits + PR template with DoD checklist |
+
+## NFR.8 Deployability
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.8.1 | Reproducible builds (`ci` install + build) |
+| NFR.8.2 | Runtime config via env + `${RUNTIME_CONFIG_ENDPOINT}` |
+| NFR.8.3 | Liveness endpoint `/healthz` |
+| NFR.8.4 | Cache-busting via hashed asset filenames |
+| NFR.8.5 | Simple rollback (immutable artifact per version) |
+
+## NFR.9 Browser / runtime compatibility (if applicable)
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.9.1 | <e.g., last 2 versions of Chrome/Edge/Firefox/Safari> |
+| NFR.9.2 | <e.g., explicit "unsupported" message for legacy browsers> |
+| NFR.9.3 | <polyfill strategy> |
+
+## NFR.10 Privacy
+
+| Id | Requirement |
+| :--- | :--- |
+| NFR.10.1 | No third-party trackers by default |
+| NFR.10.2 | Telemetry opt-in via runtime config; documented opt-out |
+| NFR.10.3 | Masking of sensitive fields in logs (`password`, `token`, `apiKey`, `secret`) |

@@ -1,0 +1,113 @@
+# Roadmap Milestones — ${PROJECT_NAME}
+
+> Stability: **evolving**. Update when a milestone closes.
+>
+> Principle: **every milestone yields a usable, testable, shippable increment**. No "infrastructure-only" milestones.
+
+## Summary
+
+| Milestone | Theme | Outcome |
+| :--- | :--- | :--- |
+| **M0** | Bootstrap & guard-rails | <one-line outcome> |
+| **M1** | <theme> | <outcome> |
+| **M2** | <theme> | <outcome> |
+| **M3** | <theme> | <outcome> |
+| **M4** | <theme> | <outcome> |
+| **M5** | <theme> | <outcome> |
+| **M6** | <theme> | <outcome> |
+| **M7** | <theme> | <outcome> |
+| **M8** | <theme> | <outcome> |
+
+## Operational model
+
+Two parallel tracks (where applicable):
+
+1. **External-dependency track**: ${SSOT_NAME} prepares contracts for the current and next milestone (see [`EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md`](EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md)).
+2. **This-repo track**: implements only micro-slices for which the contract is ready or explicitly stub-approved.
+
+Binding rules:
+
+- No milestone opens with horizontal "we'll wire it up later" work.
+- Every micro-slice has an executable check.
+- No production UI ships on simulated logic.
+- The dependency owner leads by at least one slice on the upcoming feature.
+
+## Gates per micro-slice
+
+1. **Backend-ready**: endpoint / schema / permissions / errors / audit defined.
+2. **Frontend-ready**: integrated with real contract or validated fixture.
+3. **QA-ready**: slice-specific check passes.
+
+---
+
+## M0 — Bootstrap & guard-rails
+
+**Goal**: a repository ready to receive features coherently.
+
+**Scope IN**:
+
+- scaffolding (build tool + language + strict mode)
+- baseline UI primitives (if UI project)
+- binding folder structure (see [`../architecture/TECH_STACK.md`](../architecture/TECH_STACK.md))
+- lint, format, hooks, unit + E2E configured
+- dev mocking layer (MSW or equivalent)
+- root routing, app shell, placeholder landing page
+- login form (auth still mocked)
+- i18n + dark mode (if UI)
+- CI: typecheck + lint + test + build
+- ADR `0001-stack.md`
+- documents `README`, `AGENTS.md`, `docs/` (already created by bootstrap procedure)
+
+**Out**: real auth, real data, any other feature.
+
+**Definition of Done**:
+
+- [ ] `<dev script>` opens login → landing
+- [ ] `<typecheck && lint && test && build>` green
+- [ ] CI green on PR
+- [ ] Smoke E2E: mocked login → landing
+
+---
+
+## M1 — <Theme>
+
+**Goal**: <user-visible capability sentence>.
+
+**Scope IN**:
+
+- <bullet>
+- <bullet>
+
+**Out**: <bullet>
+
+**Definition of Done**:
+
+- [ ] <check 1>
+- [ ] <check 2>
+- [ ] <check 3>
+
+---
+
+## M2 — <Theme>
+
+**Goal**: ...
+
+**Scope IN**: ...
+
+**Out**: ...
+
+**Definition of Done**:
+
+- [ ] ...
+
+---
+
+<!-- Repeat through Mn -->
+
+## Per-milestone process conventions
+
+- A folder `docs/planning/sprints/<milestone>/` may hold task briefs and the retro.
+- Each milestone **opens** with a planning section (this file) and **closes** with a retro + FR coverage update.
+- Every agent **always** declares the target milestone in the task plan.
+- Every PR links to the milestone and FRs covered (e.g., `closes FR.5.4 (M3)`).
+- Every gap due to missing/partial external dependency is recorded in [`EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md`](EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md) until resolved.

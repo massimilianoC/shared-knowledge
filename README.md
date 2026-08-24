@@ -1,165 +1,83 @@
 # Shared Knowledge Repository
 
-A curated, version-controlled library of **reusable AI skills, agents, patterns, and decisions** distilled from real production projects. Designed to be loaded directly by AI coding assistants (Claude, Codex, Copilot, Gemini, …) **and** to remain readable by humans onboarding a project.
+A curated library of reusable AI-agent skills, agent definitions, architectural knowledge, and starter templates extracted from real projects.
 
----
+## Agent Quick Start
 
-## What lives here
+Use this procedure when you have this repository's public URL or local path and need guidance for another project.
 
-- **`skills/`** — atomic, reusable capabilities. One file = one clearly defined skill.
-- **`agents/`** — specialized agents that compose 2+ related skills with a recommended system prompt.
-- **`knowledge/`** — the source material that justifies the skills:
-  - `patterns/` — recurring technical patterns,
-  - `decisions/` — architectural decisions with rationale (ADR style),
-  - `domain/` — domain knowledge (industry, client, business context).
-- **`templates/`** — copy-ready Markdown templates for new skills and agents.
-- **`inbox/`** — raw notes waiting to be processed (any language welcome).
-- **`MAP.md`** — the navigable map of the repository.
+1. Read this file, then [`domains/README.md`](domains/README.md).
+2. Match the request to one package: `sfad` for project methodology, `llm` for LLM engineering, `rag` for multi-tenant retrieval, or `capture` for screenshot/PDF generation.
+3. Read only that package's `README.md`; do not load unrelated packages.
+4. Select the smallest suitable artifact:
+   - choose an **agent** for an end-to-end workflow;
+   - choose a **skill** for one focused capability;
+   - read linked **knowledge** only when the skill or agent needs its rationale or constraints;
+   - use **templates** only when creating the matching project artifact.
+5. For a selected agent, import the agent, every skill in its **Included skills** list, and the linked knowledge those skills require. For a selected skill, import that skill plus its directly linked patterns, decisions, and templates. Preserve their relative structure.
+6. Do not import `inbox/` or repository-maintenance files (`AI_GUIDELINES.md`, `CONTRIBUTING.md`) into the target project unless you explicitly want to adopt this repository's maintenance model.
+7. Reconcile imported guidance with the target project's existing instructions, architecture, security policy, and stack. Never overwrite those files blindly.
 
-Everything is grouped **by domain first** (`llm/`, `sfad/`, …), then by competence class for skills.
+**Selection rule:** start from one artifact and follow only its dependencies. Copy the whole package only when you need broad adoption, such as a complete SFAD project bootstrap.
 
----
+## Adopt in a project
 
-## Folder structure (domain-first taxonomy)
+### New project
 
-```text
-inbox/
-  processed/
+1. Copy the required package, usually [`domains/sfad/`](domains/sfad/README.md), into the new repository.
+2. Read [`domains/sfad/README.md`](domains/sfad/README.md), then use [`sfad-bootstrap-agent.md`](domains/sfad/agents/sfad-bootstrap-agent.md).
+3. Copy [`templates/spec-first-methodology/core/`](domains/sfad/templates/spec-first-methodology/core/) to the target repository root and apply an optional flavor only when relevant.
+4. Complete [`pre-src-checklist-runner.md`](domains/sfad/skills/bootstrap/pre-src-checklist-runner.md) before creating `src/`.
+5. After bootstrap, use [`sfad-execution-agent.md`](domains/sfad/agents/sfad-execution-agent.md) for milestones, slices, and pull requests.
 
-skills/
-  llm/
-    output/          # JSON parsing, output repair, sanitization
-    platform/        # multi-provider catalog, gateway, cost, credits,
-                     # context budget, background tasks
-  sfad/
-    bootstrap/       # empty-repo → ready-to-open-M0
-    governance/      # stability tagging, ADRs (MADR)
-    execution/       # milestones, slices, 7-step workflow, PR DoD
-    coordination/    # external dependencies / parallel-team contracts
+### Existing project
 
-agents/
-  llm/               # llm-output-processor, multiprovider-llm-architect
-  sfad/              # sfad-bootstrap-agent, sfad-execution-agent
+1. Copy the relevant complete `domains/<domain>/` package into the repository without overwriting its existing instructions or architecture documents.
+2. Start with [`agents-md-author.md`](domains/sfad/skills/bootstrap/agents-md-author.md) and the architecture overview template; reconcile them with the codebase and existing team rules.
+3. Backfill requirements, roadmap, and execution documents incrementally. Do not block a safe, shippable change solely to complete historical documentation.
+4. Use the package skills selectively, and preserve their linked knowledge and decisions as context.
 
-knowledge/
-  llm/
-    patterns/        # SCREAMING_SNAKE_CASE.md
-    decisions/       # kebab-case.md (ADR style)
-    domain/          # kebab-case.md
-  sfad/
-    patterns/
-    decisions/
-    domain/
+## Use a domain package
 
-templates/
-  skill-template.md
-  agent-template.md
-```
+The reusable unit is a complete package under [`domains/`](domains/README.md):
 
-A domain folder groups every artifact (skill, agent, pattern, decision, domain note) needed to think about that competence area. New domains are created as the library grows.
-
-### Current domains
-
-| Domain | Scope |
+| Package | Use it for |
 | --- | --- |
-| `llm/` | LLM engineering: output parsing/repair, multi-provider platform (catalog, gateway, cost, credits, context, background tasks). |
-| `sfad/` | Spec-First Agentic Development: methodology to bootstrap, govern, execute, and coordinate projects touched by AI agents. |
+| [`domains/sfad/`](domains/sfad/README.md) | Bootstrapping and operating spec-first agentic projects. |
+| [`domains/llm/`](domains/llm/README.md) | Reliable LLM outputs and multi-provider platform engineering. |
+| [`domains/rag/`](domains/rag/README.md) | Multi-tenant RAG architecture and anti-leakage controls. |
+| [`domains/capture/`](domains/capture/README.md) | Server-side screenshot and PDF capture. |
 
-See **[MAP.md](MAP.md)** for the full index, dependency graph, and per-domain skill/agent listing.
-
----
+To reuse a package, copy its entire directory into the target repository, read its `README.md`, and preserve the internal structure. Do not copy an isolated agent or skill without its linked knowledge.
 
 ## For humans
 
-### Start here
-
-1. Open **[MAP.md](MAP.md)** to see what skills/agents/knowledge are available.
-2. Pick a skill that matches your task, e.g. [`skills/sfad/bootstrap/spec-first-bootstrap.md`](skills/sfad/bootstrap/spec-first-bootstrap.md).
-3. Copy the **Steps / Procedure** section into your workflow, or paste the **Recommended system prompt** (from an agent) into your assistant.
-
-### Contribute new knowledge
-
-You have two paths:
-
-- **OPTION A** — You already know the file type. Drop the file directly in the right domain folder. Then ask an AI assistant to derive the skill/agent.
-- **OPTION B** — You have raw notes (any language). Drop them in `inbox/` and run the processing command (see below).
-
-See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full contribution flow, naming conventions, and quality checklist.
-
----
+1. Start at [domains/README.md](domains/README.md).
+2. Copy the relevant `domains/<domain>/` directory into your project.
+3. Follow the package README and use its skills, agents, and templates selectively.
+4. Contribute new material through [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## For AI agents
 
-### Reading order
+1. Read [AI_GUIDELINES.md](AI_GUIDELINES.md).
+2. Read [MAP.md](MAP.md) and the target package README.
+3. Store all new artifacts under `domains/<domain>/`.
+4. Keep package links valid and update the package README plus MAP.
+5. Write generated structured content in English.
 
-When you start a task in this repository, read in this order:
+## Ingesting new knowledge
 
-1. **[CLAUDE.md](CLAUDE.md)** — operational instructions for AI assistants in this repo.
-2. **[AI_GUIDELINES.md](AI_GUIDELINES.md)** — the master rule reference (output language, folder taxonomy, processing rules, file conventions).
-3. **[MAP.md](MAP.md)** — current skills/agents/knowledge per domain.
-4. The target domain's `knowledge/<domain>/domain/<domain-overview>.md` for big-picture context (e.g. [`knowledge/sfad/domain/sfad-methodology.md`](knowledge/sfad/domain/sfad-methodology.md)).
-5. The specific skill or agent file you are asked to use.
+Put raw notes in `inbox/` and request `process inbox` or `elabora inbox`. The source is classified, extracted into a domain package, and archived in `inbox/processed/`.
 
-### Processing inbox content
-
-When the user provides raw notes:
+## Repository structure
 
 ```text
-"elabora inbox"         # process every file in inbox/ (except ISTRUZIONI.md and processed/)
-"elabora <filename>"    # process a specific file
-"crea skill da <file>"  # extract only the skills from one file
-"aggiorna agenti"       # check whether new skills should update existing agents
-"trova affinità"        # detect overlap between skills and knowledge
-"riepilogo repository"  # show the current state of skills, agents, knowledge
+domains/             copyable domain packages
+inbox/               raw project notes awaiting ingestion
+inbox/processed/     archived source material
+templates/           generic authoring templates
 ```
-
-These commands are accepted in **both English and Italian** (the user's native language). The English equivalents are:
-
-```text
-"process inbox" | "process <filename>" | "create skill from <file>"
-"update agents" | "find affinities" | "repository summary"
-```
-
-The rules for processing are codified in [AI_GUIDELINES.md](AI_GUIDELINES.md) §"Rule 1 — How to process a file in inbox/".
-
-### Output language
-
-All structured outputs created or updated in this repository must be written in **English**. Raw inbox notes can be in any language; the assistant translates concepts into English during extraction.
-
----
-
-## Quick template for raw inbox notes
-
-```markdown
-# Title / Project name or topic
-
-## Context
-Short description of the project or situation
-
-## What we implemented / Patterns used
-...
-
-## Mistakes to avoid
-...
-
-## Lessons learned
-...
-```
-
-Free-form text also works — the assistant will interpret it.
-
----
 
 ## License
 
-[MIT](LICENSE) © 2026 Massimiliano Camillucci. The methodology kit, skill templates, and knowledge files are intended to be copy-able into other repositories — treat them as a living standard. Attribution appreciated, not required.
-
----
-
-## Stability of this repository
-
-- `skills/`, `agents/`, `knowledge/patterns/` — stable; changes follow the principles documented in `knowledge/sfad/patterns/STABILITY_LAYERS.md`.
-- `knowledge/decisions/` — append-only; superseded decisions are marked, never deleted.
-- `inbox/` — ephemeral; once processed, files are moved to `inbox/processed/`.
-- `templates/` — evolving; updated as the library grows.
-- `MAP.md` — updated on every change.
+This repository is available under the [MIT License](LICENSE).

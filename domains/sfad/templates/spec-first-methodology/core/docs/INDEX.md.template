@@ -1,0 +1,75 @@
+# Documentation Index
+
+> Navigable index of ${PROJECT_NAME}'s documentation.
+>
+> Documents are grouped by **stability layer**: high = changes rarely, guides everything else; low = sprint-by-sprint.
+
+## 1. Agentic entry points (repo root)
+
+Mandatory starting point for any AI agent.
+
+- [`../AGENTS.md`](../AGENTS.md) — Binding rules
+- [`../CLAUDE.md`](../CLAUDE.md), [`../GEMINI.md`](../GEMINI.md), [`../COPILOT.md`](../COPILOT.md) — Aliases
+- [`../README.md`](../README.md) — Repository overview
+
+## 2. Vision & Mission (maximum stability)
+
+- [`vision/VISION_AND_MISSION.md`](vision/VISION_AND_MISSION.md)
+
+## 3. Architecture (technical Single Source of Truth)
+
+- [`architecture/ARCHITECTURE_OVERVIEW.md`](architecture/ARCHITECTURE_OVERVIEW.md) — System shape, SSoT per concern, binding constraints
+- [`architecture/TECH_STACK.md`](architecture/TECH_STACK.md) — Official stack
+- [`architecture/INTEGRATION_CONTRACT.md`](architecture/INTEGRATION_CONTRACT.md) — Boundary contract with ${SSOT_NAME}
+- [`architecture/SECURITY_AND_AUTH.md`](architecture/SECURITY_AND_AUTH.md) — Threat model, AuthN/AuthZ
+- `architecture/proposals/` — RFCs under discussion (created ad-hoc)
+- `architecture/decisions/` — Accepted ADRs (MADR format)
+
+## 4. Requirements
+
+- [`requirements/FUNCTIONAL_REQUIREMENTS.md`](requirements/FUNCTIONAL_REQUIREMENTS.md) — What the system must do, mapped to milestones
+- [`requirements/NON_FUNCTIONAL_REQUIREMENTS.md`](requirements/NON_FUNCTIONAL_REQUIREMENTS.md) — Quality budgets
+
+## 5. Analysis & domain
+
+- [`analysis/DOMAIN_MODEL.md`](analysis/DOMAIN_MODEL.md) — Conceptual aggregates
+- [`analysis/USER_PERSONAS.md`](analysis/USER_PERSONAS.md) — Personas and flows
+
+## 6. UI/UX (if applicable)
+
+- `ui-ux/DESIGN_PRINCIPLES.md`
+- `ui-ux/INFORMATION_ARCHITECTURE.md`
+
+## 7. Planning
+
+- [`planning/ROADMAP_MILESTONES.md`](planning/ROADMAP_MILESTONES.md) — Milestones M0 → Mn
+- [`planning/EXECUTION_SPEC.md`](planning/EXECUTION_SPEC.md) — Micro-slices in execution
+- [`planning/EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md`](planning/EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md) — Contracts owed by external teams (if applicable)
+- `planning/sprints/` — Per-sprint plans (created ad-hoc)
+
+## 8. Guidelines (read-only inputs)
+
+> Owned by external teams or systems. Read-only for this repo.
+
+- `guidelines/...` (added as needed)
+
+## 9. Future areas (placeholders, create when activated)
+
+- `api/` — schema mirror (OpenAPI / IDL), example payloads, contract tests
+- `tasks/` — per-task agent briefs (one per non-trivial task)
+- `runbooks/` — operational procedures (deploy, rollback, incident)
+- `qa/` — test plans, coverage matrix, regression suite
+
+## Conventions
+
+- Stability label at the top of every doc: `Stability: stable | evolving | draft`.
+- Documentation language: **${PROJECT_LANGUAGE}**. Code identifiers: English.
+- Architecture decisions → ADRs in `architecture/decisions/NNNN-title.md`.
+- Update this index when adding a top-level doc under `docs/`.
+
+## Suggested reading path
+
+1. [`architecture/ARCHITECTURE_OVERVIEW.md`](architecture/ARCHITECTURE_OVERVIEW.md)
+2. [`architecture/INTEGRATION_CONTRACT.md`](architecture/INTEGRATION_CONTRACT.md)
+3. [`planning/ROADMAP_MILESTONES.md`](planning/ROADMAP_MILESTONES.md)
+4. [`planning/EXECUTION_SPEC.md`](planning/EXECUTION_SPEC.md)

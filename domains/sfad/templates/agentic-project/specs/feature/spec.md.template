@@ -1,0 +1,50 @@
+# Feature Specification: ${FEATURE_NAME}
+
+> Status: **draft | approved | implemented**  
+> Owner: `${OWNER}`  
+> Milestone / slice: `${MILESTONE_AND_SLICE}`
+
+## Outcome and scope
+
+- **User outcome**: `${USER_OUTCOME}`
+- **In scope**: `${IN_SCOPE}`
+- **Out of scope**: `${OUT_OF_SCOPE}`
+- **Linked requirements**: `${FR_AND_NFR_IDS}`
+
+## Structured requirements
+
+| ID | Requirement | Priority | Risk |
+| --- | --- | --- | --- |
+| `${REQ_ID}` | `WHEN ${EVENT} IF ${CONDITION} THEN THE SYSTEM SHALL ${OUTCOME}` | `${PRIORITY}` | `${RISK_TIER}` |
+
+Use EARS when event/condition/state wording resolves ambiguity. Keep plain language when it is already precise.
+
+## Acceptance examples
+
+### Successful outcome
+
+```gherkin
+Given ${PRECONDITION}
+When ${ACTION}
+Then ${OBSERVABLE_OUTCOME}
+```
+
+### Failure or boundary outcome
+
+```gherkin
+Given ${FAILURE_PRECONDITION}
+When ${ACTION}
+Then ${SAFE_FAILURE_OUTCOME}
+```
+
+## Verification plan
+
+- Baseline: `${BASELINE_CHECKS}`
+- Risk-specific evidence: `${RISK_SPECIFIC_CHECKS}`
+- Demonstration or release evidence: `${DEMO_EVIDENCE}`
+
+## Decisions needed
+
+| Question | Recommended option | Alternatives | Owner | Latest safe decision point |
+| --- | --- | --- | --- | --- |
+| `${DECISION}` | `${RECOMMENDATION}` | `${ALTERNATIVES}` | `${DECISION_OWNER}` | `${DEADLINE}` |

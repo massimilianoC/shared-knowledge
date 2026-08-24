@@ -1,0 +1,49 @@
+# User Personas — ${PROJECT_NAME}
+
+> Stability: **evolving**. Update when audience shifts or new roles emerge.
+
+## Audience
+
+This project is built for the following personas:
+
+### Persona 1 — ${AUDIENCE_1}
+
+- **Role / context**: <what they do day-to-day>
+- **Primary goals**: <what success looks like for them>
+- **Pain points**: <what hurts today>
+- **Critical flows**: <2–3 flows they live in>
+- **Out-of-scope**: <what they explicitly cannot do here>
+
+### Persona 2 — ${AUDIENCE_2}
+
+- **Role / context**: ...
+- ...
+
+### Persona 3 — ${AUDIENCE_3}
+
+- ...
+
+## Non-audience
+
+People / roles who are *not* served by this project:
+
+- ${NON_AUDIENCE}
+
+They are served by: <related repo / product / channel>.
+
+## Inter-persona dynamics
+
+How personas collaborate (or don't) inside the system:
+
+- <Persona A> hands off to <Persona B> at <stage>.
+- <Persona C> escalates to <Persona D> when ...
+- <conflict pattern, if any>
+
+## Persona → permission mapping
+
+| Persona | Typical permissions | Notes |
+| :--- | :--- | :--- |
+| ${AUDIENCE_1} | <permission set> | <scope> |
+| ${AUDIENCE_2} | ... | ... |
+
+(Concrete permission strings live in the SSoT's documentation.)

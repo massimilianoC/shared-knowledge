@@ -1,0 +1,61 @@
+# Functional Requirements — ${PROJECT_NAME}
+
+> Stability: **evolving**. Update when a milestone adds/modifies capability.
+>
+> Conventions:
+>
+> - **MoSCoW** prioritization per FR: `M` (must), `S` (should), `C` (could), `W` (won't / future).
+> - Milestone mapping: `→ M<n>`.
+> - These are *product* requirements: for technical *how*, see `architecture/*`.
+
+## Related documents
+
+- [`../planning/ROADMAP_MILESTONES.md`](../planning/ROADMAP_MILESTONES.md)
+- [`../planning/EXECUTION_SPEC.md`](../planning/EXECUTION_SPEC.md)
+- [`../architecture/INTEGRATION_CONTRACT.md`](../architecture/INTEGRATION_CONTRACT.md)
+
+## FR.1 <Concern 1 — e.g., Authentication & Session>
+
+| Id | Description | Prio | Mile |
+| :--- | :--- | :--- | :--- |
+| FR.1.1 | <one-line requirement> | M | M0 |
+| FR.1.2 | <...> | M | M0 |
+| FR.1.3 | <...> | S | M1 |
+
+## FR.2 <Concern 2 — e.g., Identity & Access>
+
+| Id | Description | Prio | Mile |
+| :--- | :--- | :--- | :--- |
+| FR.2.1 | ... | M | M1 |
+| FR.2.2 | ... | M | M1 |
+
+## FR.3 <Concern 3 — e.g., Overview / Health>
+
+| Id | Description | Prio | Mile |
+| :--- | :--- | :--- | :--- |
+| FR.3.1 | ... | M | M1 |
+| FR.3.2 | ... | M | M2 |
+
+<!--
+Repeat for every concern: keep IDs stable; never renumber.
+Add a tick `[x]` next to FRs that have shipped (or maintain a separate progress table).
+-->
+
+## Cross-concern requirements
+
+### FR.20 Accessibility, i18n, UX
+
+| Id | Description | Prio | Mile |
+| :--- | :--- | :--- | :--- |
+| FR.20.1 | A11y WCAG 2.1 AA on core pages | M | M1+ |
+| FR.20.2 | i18n with dictionary (default `${PROJECT_DEFAULT_LOCALE}`, fallback `${PROJECT_FALLBACK_LOCALE}`) | M | M1 |
+| FR.20.3 | Dark mode (if UI) | S | M1 |
+| FR.20.4 | Full keyboard navigation | M | M1+ |
+| FR.20.5 | Educational empty states linked to docs | S | continuous |
+
+## Discovery & promotion rules
+
+- A new FR is added when a real product need surfaces and is agreed.
+- An FR's priority may be promoted (e.g., S → M) via a roadmap edit; never demoted silently.
+- Once shipped, an FR is marked `[x]` and remains in the table as historical record.
+- An FR explicitly out-of-scope is marked `W` with a brief note.

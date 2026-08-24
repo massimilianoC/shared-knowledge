@@ -1,0 +1,79 @@
+# Information Architecture — ${PROJECT_NAME}
+
+> Stability: **evolving**. Map of routes, navigation, and content hierarchy.
+
+## 1. Top-level navigation
+
+```
+TOPBAR:    Logo | Global Search | Jobs(badge) | Notifications | Theme | User Menu
+SIDEBAR:   Overview
+           Users & IAM
+              ├─ Users
+              ├─ Service Users
+              ├─ Roles & Permissions
+              └─ My Profile
+           <Domain 1>
+              ├─ ...
+           <Domain 2>
+              ├─ ...
+           Settings
+              ├─ Config Entries
+              ├─ Feature Flags
+              ├─ Integrations
+              └─ Branding
+           System
+              ├─ Jobs
+              ├─ Audit
+              ├─ Health
+              └─ Diagnostics
+```
+
+Sidebar items are filtered by the current user's effective permissions.
+
+## 2. Route table
+
+| Route | Purpose | Required permissions | Notes |
+| :--- | :--- | :--- | :--- |
+| `/login` | Login form | public | mocked in M0 |
+| `/overview` | Dashboard | `overview:read` | landing post-login |
+| `/iam/me` | Admin profile | authenticated | |
+| `/users` | Users list | `user:read` | filters, paginated |
+| `/users/:id` | User detail | `user:read` | |
+| `/<domain>` | <Domain> list | `<domain>:read` | |
+| `/<domain>/:id` | <Domain> detail | `<domain>:read` | |
+| `/jobs` | Jobs list | `job:read` | polling/SSE |
+| `/jobs/:id` | Job detail | `job:read` | |
+| `/audit` | Audit log | `audit:read` | filters |
+| `/settings/config` | Config editor | `config:read/write` | |
+| `/settings/feature-flags` | Feature flags | `config:flag:write` | |
+| `/diagnostics` | Client diagnostics | authenticated | |
+
+## 3. Page templates
+
+Standard templates reused across the app:
+
+- **List template**: filters bar → table (virtualized if >200) → pagination/cursor → bulk action bar.
+- **Detail template**: breadcrumbs → header (status badges + primary actions) → tabs (Overview / Activity / Audit / Related) → side panel (metadata).
+- **Form template**: stepper or sections → primary actions sticky → unsaved-changes guard.
+- **Dashboard template**: stat cards row → trend charts → backlog widgets.
+
+## 4. Routing decisions
+
+- Data routers with loaders for permission-gated routes.
+- 404 → contextual empty state.
+- 403 → empty state with `correlationId` + "Request access".
+
+## 5. Cross-page state
+
+- Selected entity context (e.g., current Fleet) carried in URL params, not in global store.
+- Saved views per list, stored in URL `?view=<id>` and on the SSoT.
+
+## 6. Search & lookup
+
+- Global search in topbar: cross-domain (users, devices, oases, media ids).
+- Per-page search/filter inside list templates.
+
+## 7. Notifications & toasts
+
+- Toasts for transient events (mutation success, error).
+- Notifications panel for persistent items (job completed, audit alert).

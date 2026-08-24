@@ -1,0 +1,77 @@
+# Vision & Mission
+
+> Stability: **stable**. Changes only via explicit product decision.
+
+## 1. Vision
+
+${PROJECT_VISION}
+
+<!--
+Guidance: 2–4 paragraphs. Describe the world this project enables. Include:
+- the scale (N users, M devices, K transactions per second, ...) when relevant
+- the boundary of operation (geographic, organizational, technical)
+- the *change* this project effects in that world
+-->
+
+## 2. Mission
+
+> ${PROJECT_MISSION}
+
+<!--
+Guidance: One bold sentence. Then a list of concrete capabilities. Each capability should answer "what can a user newly *do* because of this project?".
+-->
+
+Concretely, the project must enable a user to:
+
+1. <capability 1>
+2. <capability 2>
+3. <capability 3>
+4. ...
+
+## 3. Audience
+
+| Persona / Role | Primary needs |
+| :--- | :--- |
+| ${AUDIENCE_1} | <needs> |
+| ${AUDIENCE_2} | <needs> |
+| ${AUDIENCE_3} | <needs> |
+
+**Non-audience**: ${NON_AUDIENCE}.
+
+<!--
+Be explicit about who this is NOT for. This prevents scope drift later.
+-->
+
+## 4. Guiding principles
+
+<!--
+Adapt the SFAD pillars to your project. Keep the list tight (6–10).
+-->
+
+1. **<Principle 1>** — <one-line rationale>.
+2. **<Principle 2>** — ...
+3. ...
+
+## 5. Non-objectives (what we are NOT)
+
+<!--
+A closed list. The clearer this list, the easier every future scoping discussion.
+-->
+
+- We are not <thing 1>.
+- We do not <thing 2>.
+- We do not aim to replace <existing system>.
+- ...
+
+## 6. Time horizon
+
+See [`../planning/ROADMAP_MILESTONES.md`](../planning/ROADMAP_MILESTONES.md). At a glance:
+
+- **M0–M2**: <phase theme>.
+- **M3–M5**: <phase theme>.
+- **M6+**: <phase theme>.
+
+## 7. Related documents
+
+- [`../architecture/ARCHITECTURE_OVERVIEW.md`](../architecture/ARCHITECTURE_OVERVIEW.md)
+- [`../requirements/FUNCTIONAL_REQUIREMENTS.md`](../requirements/FUNCTIONAL_REQUIREMENTS.md)
