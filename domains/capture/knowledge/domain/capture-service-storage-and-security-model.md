@@ -58,5 +58,5 @@ baseline, not a hard requirement.
 - [html-artifact-capture-bootstrap](../../skills/html-artifact-capture-bootstrap.md)
 
 ## Source
-Extracted from: `inbox/screenshot-pdf-export/docs/ARCHITECTURE.md`
+Source materials are intentionally excluded from this public repository.
 Date: 2026-07-01

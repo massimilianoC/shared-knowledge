@@ -44,5 +44,5 @@ two different sets of rendering bugs and CSS-support gaps instead of one.
   document the CSS/JS feature gap explicitly.
 
 ## Source
-Extracted from: `inbox/screenshot-pdf-export/SKILL.md`, `inbox/screenshot-pdf-export/docs/ARCHITECTURE.md`
+Source materials are intentionally excluded from this public repository.
 Date: 2026-07-01

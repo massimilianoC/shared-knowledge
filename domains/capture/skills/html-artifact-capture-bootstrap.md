@@ -132,5 +132,5 @@ an on-demand full-page screenshot download. Deployed on AWS Lambda."
 - [os-installed-chromium-over-bundled-download](../knowledge/decisions/os-installed-chromium-over-bundled-download.md)
 
 ## Source
-Extracted from: `inbox/screenshot-pdf-export/SKILL.md`, `inbox/screenshot-pdf-export/AGENTS.md`, `inbox/screenshot-pdf-export/docs/PORTING_CHECKLIST.md`, `inbox/screenshot-pdf-export/docs/CODE_TEMPLATES/`
+Source materials are intentionally excluded from this public repository.
 Date: 2026-07-01

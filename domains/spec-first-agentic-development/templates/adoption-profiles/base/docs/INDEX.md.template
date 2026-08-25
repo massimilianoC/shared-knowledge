@@ -1,0 +1,14 @@
+# Documentation Index — ${PROJECT_NAME}
+
+## Read first
+
+| Document | Authority |
+| --- | --- |
+| [`../AGENTS.md`](../AGENTS.md) | Project boundary, working rules, and verification. |
+| [`planning/ROADMAP.md`](planning/ROADMAP.md) | Ordered delivery outcomes and active focus. |
+| [`decisions/`](decisions/) | Accepted material decisions. |
+| [`../specs/`](../specs/) | Feature outcomes, acceptance examples, and verification plans. |
+
+## Maintenance
+
+Add an entry when a project document becomes an authority. Promote to the Full profile instead of growing this compact index into a duplicate architecture catalogue.

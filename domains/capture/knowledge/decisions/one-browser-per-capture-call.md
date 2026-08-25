@@ -36,5 +36,5 @@ negligible relative to the rest of the capture pipeline.
   browser object around."
 
 ## Source
-Extracted from: `inbox/screenshot-pdf-export/docs/ARCHITECTURE.md`, `inbox/screenshot-pdf-export/AGENTS.md`
+Source materials are intentionally excluded from this public repository.
 Date: 2026-07-01

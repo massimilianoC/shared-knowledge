@@ -1,0 +1,37 @@
+# Feature Spec: ${FEATURE_NAME}
+
+> Status: **draft | approved | implemented**
+> Owner: ${OWNER}
+
+## Outcome and boundary
+
+- **User outcome**: ${USER_OUTCOME}
+- **In scope**: ${IN_SCOPE}
+- **Out of scope**: ${OUT_OF_SCOPE}
+
+## Requirements
+
+- `${REQ_ID}`: WHEN ${EVENT} IF ${CONDITION} THEN THE SYSTEM SHALL ${EXPECTED_BEHAVIOUR}.
+
+## Acceptance examples
+
+```gherkin
+Given ${PRECONDITION}
+When ${ACTION}
+Then ${OBSERVABLE_OUTCOME}
+```
+
+```gherkin
+Given ${FAILURE_PRECONDITION}
+When ${ACTION}
+Then ${SAFE_FAILURE_OUTCOME}
+```
+
+## Verification
+
+- Baseline: ${BASELINE_CHECKS}
+- Risk-specific evidence: ${RISK_SPECIFIC_EVIDENCE}
+
+## Decisions needed
+
+${DECISIONS_NEEDED_OR_NONE}

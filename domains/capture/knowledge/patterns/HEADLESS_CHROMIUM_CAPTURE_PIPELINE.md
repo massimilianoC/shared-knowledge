@@ -128,5 +128,5 @@ This is what makes it portable across projects.
 - [os-installed-chromium-over-bundled-download](../decisions/os-installed-chromium-over-bundled-download.md)
 
 ## Source
-Extracted from: `inbox/screenshot-pdf-export/SKILL.md`, `inbox/screenshot-pdf-export/docs/ARCHITECTURE.md`, `inbox/screenshot-pdf-export/docs/CODE_TEMPLATES/capture-service.ts`
+Source materials are intentionally excluded from this public repository.
 Date: 2026-07-01

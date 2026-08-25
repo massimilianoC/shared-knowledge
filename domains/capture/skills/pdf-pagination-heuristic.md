@@ -82,5 +82,5 @@ service."
 - [HEADLESS_CHROMIUM_CAPTURE_PIPELINE](../knowledge/patterns/HEADLESS_CHROMIUM_CAPTURE_PIPELINE.md)
 
 ## Source
-Extracted from: `inbox/screenshot-pdf-export/docs/ARCHITECTURE.md`, `inbox/screenshot-pdf-export/docs/CODE_TEMPLATES/capture-service.ts`
+Source materials are intentionally excluded from this public repository.
 Date: 2026-07-01

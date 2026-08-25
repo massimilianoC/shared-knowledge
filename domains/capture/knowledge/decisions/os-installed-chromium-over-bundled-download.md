@@ -50,5 +50,5 @@ acceptable for quick local prototyping outside a container where these constrain
   feature.
 
 ## Source
-Extracted from: `inbox/screenshot-pdf-export/docs/CODE_TEMPLATES/dockerfile-snippet.md`, `inbox/screenshot-pdf-export/AGENTS.md`
+Source materials are intentionally excluded from this public repository.
 Date: 2026-07-01

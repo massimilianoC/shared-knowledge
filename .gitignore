@@ -62,6 +62,16 @@ AGENTS.local.md
 .env.*
 !.env.example
 
+# Private ingestion and repository-maintenance material
+/inbox/
+/AGENTS.md
+/AI_GUIDELINES.md
+/CLAUDE.md
+/CONTRIBUTING.md
+/.cursorrules
+/.windsurfrules
+/.github/copilot-instructions.md
+
 # ---------------------------------------------------------------------------
 # Python (in case helper scripts appear during processing)
 # ---------------------------------------------------------------------------

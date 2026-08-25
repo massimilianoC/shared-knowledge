@@ -1,0 +1,17 @@
+# ${PROJECT_NAME}
+
+${PROJECT_OUTCOME}
+
+## Start here
+
+- Read [`AGENTS.md`](AGENTS.md) before contributing.
+- See [`docs/INDEX.md`](docs/INDEX.md) for authoritative project documents.
+- See [`docs/planning/ROADMAP.md`](docs/planning/ROADMAP.md) for current delivery focus.
+
+## Current status
+
+${CURRENT_STATUS}
+
+## Operating profile
+
+This repository uses **SFAD Compact (Base)**. Promote it to Full when the project needs a formal architecture/requirements stack, multi-contributor handoffs, or explicit dependency management.

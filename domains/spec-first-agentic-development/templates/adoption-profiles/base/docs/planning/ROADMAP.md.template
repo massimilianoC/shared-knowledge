@@ -1,0 +1,22 @@
+# Roadmap — ${PROJECT_NAME}
+
+> Status: **evolving**. Keep this ordered by the next valuable outcome, not by technical layers.
+
+## Current focus
+
+- **Outcome**: ${CURRENT_OUTCOME}
+- **Feature spec**: `${FEATURE_SPEC_PATH}`
+- **Definition of done**: ${CURRENT_DOD}
+
+## Ordered backlog
+
+| Order | Outcome | Status | Acceptance evidence |
+| --- | --- | --- | --- |
+| 1 | ${OUTCOME_1} | active | ${EVIDENCE_1} |
+| 2 | ${OUTCOME_2} | planned | ${EVIDENCE_2} |
+| 3 | ${OUTCOME_3} | planned | ${EVIDENCE_3} |
+
+## Notes
+
+- Keep implementation tasks in the issue tracker or feature spec; this roadmap tracks outcomes.
+- Promote to `ROADMAP_MILESTONES.md` and `EXECUTION_SPEC.md` in the Full profile when this view no longer captures dependency or delivery complexity.

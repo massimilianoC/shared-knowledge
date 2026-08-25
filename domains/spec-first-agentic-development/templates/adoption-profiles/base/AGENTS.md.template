@@ -1,0 +1,41 @@
+# AGENTS.md — ${PROJECT_NAME} Compact Contract
+
+> This is the tool-neutral project contract. Keep it short, current, and enforce hard rules through tooling where possible.
+
+## Project boundary
+
+- **Outcome**: ${PROJECT_OUTCOME}
+- **Audience**: ${PRIMARY_AUDIENCE}
+- **Non-goals**: ${NON_GOALS}
+- **Sources of truth**: ${SSOT_REFERENCE}
+- **Documentation language**: ${DOCUMENTATION_LANGUAGE}; code, identifiers, paths, and commit messages are English.
+
+## Read before work
+
+1. This file.
+2. `docs/INDEX.md`.
+3. The active item in `docs/planning/ROADMAP.md`.
+4. The relevant feature spec under `specs/` and any applicable ADR.
+
+## Working rules
+
+1. Define the outcome and acceptance examples before any non-trivial implementation.
+2. Do not invent product scope, contracts, credentials, permissions, or policy; escalate material ambiguity.
+3. Change the smallest coherent slice, then test the observable behaviour.
+4. Keep one source of truth for each concern and update it with the change.
+5. Never commit secrets, private production data, or fabricated success states.
+
+## Decision gates
+
+Proceed autonomously on approved, reversible work. Ask for one focused decision before changing scope, architecture, security/privacy, external cost, compliance, irreversible data, or acceptance trade-offs. Record the answer in a feature spec or ADR.
+
+## Verification and completion
+
+- Baseline commands: `${BASELINE_VERIFICATION_COMMANDS}`.
+- Additional gates for this change: `${RISK_SPECIFIC_GATES}`.
+- Do not declare work complete until acceptance evidence and required checks pass.
+- Record an explicit, time-bounded exception if a required check cannot run.
+
+## Promotion to Full
+
+Use the Full profile in the SFAD package when recurring handoffs, external dependencies, material risk, or multiple active contributors need deeper architecture, requirements, and planning documentation.

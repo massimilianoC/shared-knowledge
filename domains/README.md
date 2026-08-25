@@ -6,10 +6,11 @@ Each directory in this folder is a self-contained knowledge package. It can be c
 
 | Package | Purpose | Entry point |
 | --- | --- | --- |
-| [`sfad/`](sfad/README.md) | Spec-First Agentic Development: bootstrap and operate a project with durable agent context. | [`sfad/README.md`](sfad/README.md) |
-| [`llm/`](llm/README.md) | LLM output processing and multi-provider platform engineering. | [`llm/README.md`](llm/README.md) |
-| [`rag/`](rag/README.md) | Multi-tenant retrieval-augmented generation architecture and leakage controls. | [`rag/README.md`](rag/README.md) |
+| [`spec-first-agentic-development/`](spec-first-agentic-development/README.md) | Spec-First Agentic Development: bootstrap and operate a project with durable agent context. | [`spec-first-agentic-development/README.md`](spec-first-agentic-development/README.md) |
+| [`llm-provider/`](llm-provider/README.md) | LLM output processing and multi-provider platform engineering. | [`llm-provider/README.md`](llm-provider/README.md) |
+| [`rag-system/`](rag-system/README.md) | Multi-tenant retrieval-augmented generation architecture and leakage controls. | [`rag-system/README.md`](rag-system/README.md) |
 | [`capture/`](capture/README.md) | Server-side HTML, screenshot, and PDF artifact capture. | [`capture/README.md`](capture/README.md) |
+| [`workflow-automation/`](workflow-automation/README.md) | Durable automated workflows with a typed node graph and visual runtime UI. | [`workflow-automation/README.md`](workflow-automation/README.md) |
 
 ## Agent selection and import
 
@@ -22,4 +23,4 @@ Each directory in this folder is a self-contained knowledge package. It can be c
 
 ## Repository-wide assets
 
-[`../templates/`](../templates/) contains generic skill and agent authoring templates. Root files such as [`../AI_GUIDELINES.md`](../AI_GUIDELINES.md) govern this repository only and are not required by a copied domain package.
+[`../templates/`](../templates/) contains generic skill and agent authoring templates. The root README and [`../MAP.md`](../MAP.md) are navigation aids and are not required by a copied domain package.
