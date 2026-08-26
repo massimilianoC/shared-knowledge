@@ -1,85 +1,111 @@
-# Domain: Multi-Tenant RAG — Token Claims and Chunk Data Model
+# Domain: Multi-Tenant RAG Authorization, Chunk, and Generation Model
+
+## Evidence status
+The tenant, scope, actor-binding, retention, and core chunk fields are a
+**validated reference**. Generation, pipeline, and content-integrity fields are
+**compatible extensions** derived from the retrieval-lifecycle review.
 
 ## Context
-Reference data model for a multi-tenant RAG subsystem built on the
-[double-sandboxing pattern](../patterns/DOUBLE_SANDBOXING.md). Validated on a
-NestJS + LangChain JS + Weaviate implementation; the field names are a starting
-point to adapt to the target domain's own tenant/scope vocabulary, not to copy
-verbatim.
+This is a storage- and framework-neutral reference model for the
+[double-sandboxing pattern](../patterns/DOUBLE_SANDBOXING.md). Field names are
+examples to adapt to the target domain; their security roles and relationships
+are the portable contract.
 
-## Gateway token claims
-| Field | Type | Notes |
+## Trusted service credential
+
+| Field role | Example shape | Notes |
 |---|---|---|
-| organizationId | string | hard tenant boundary — never optional, never from the request body |
-| userId | string | |
-| actorType | string | |
-| roles | string[]? | e.g. `super_admin` for explicit, auditable cross-org god-mode |
-| allowedScopes | GatewayScope[] | intersected with requested scopes, never unioned |
-| projectId | string? | present if the token is bound to one project |
-| chatId | string? | present if the token is bound to one chat |
-| agentId | string? | present if the token is bound to one agent |
-| iat / exp | number | short TTL, ≤120s recommended |
-| jti | string | |
-| iss / aud | string / string[] | pinned at verification, not just checked for presence |
+| Hard tenant key | string | Mandatory; derived from verified claims, never trusted from request data |
+| Actor identity and type | string values | Identifies the authorized caller context |
+| Roles | optional list | Cross-tenant administrative authority must be explicit and auditable |
+| Allowed scopes | list of scope pairs | Intersected with requested scopes, never unioned |
+| Actor bindings | optional identifiers | Project, conversation, agent, session, or domain equivalents |
+| Issued and expiry times | timestamps | Short-lived credential with enforced expiry |
+| Unique token identifier | string | Supports audit and replay controls |
+| Issuer and audience | strings | Pinned during verification |
 
 ## Scope model
-| scopeType | Use case | Lifecycle |
-|---|---|---|
-| org_knowledge_pack | Org-wide knowledge base (policies, docs shared org-wide) | Long-lived, versioned |
-| user_project | User/team projects with ACL (owner/editor/reader at the gateway level) | Long-lived |
-| chat_ephemeral | On-demand chat attachments | Short TTL, mandatory cleanup |
 
-`GatewayScope = { scopeType, scopeId }`. Derive your own `scopeType` union from
-the target product's real isolation boundaries — the three above are one
-concrete instance, not a required set.
-
-## Indexed chunk metadata (Weaviate collection properties)
-| Field | Type | Notes |
-|---|---|---|
-| chunkId | text (field tokenization) | exact-match filter key |
-| documentId | text (field tokenization) | exact-match filter key |
-| text | text (default tokenization) | retrieved content, not a filter key |
-| scopeType | text (field tokenization) | |
-| scopeId | text (field tokenization) | |
-| ownerUserId | text (field tokenization) | |
-| documentName | text (field tokenization) | |
-| retentionPolicy | text (field tokenization) | |
-| createdAt | text (ISO string) | |
-| expiresAt | text (ISO string) | far-future sentinel (`9999-12-31T23:59:59.999Z`) for "no expiry" instead of a nullable field, so `greaterThan(now)` applies uniformly |
-
-Every chunk also carries the hard tenant key (`organizationId`) implicitly via
-the Weaviate tenant it's written into — it is not a queryable property inside the
-tenant, because the tenant boundary itself already enforces it (see
-[weaviate-native-multitenancy-vs-qdrant](../decisions/weaviate-native-multitenancy-vs-qdrant.md)).
-
-## Common operational query shapes
-```ts
-// Ensure tenant exists (lazy onboarding, zero migration)
-const existing = await collection.tenants.getByNames([organizationId]);
-if (!existing[organizationId]) await collection.tenants.create([{ name: organizationId }]);
-
-// Every read/write resolves the tenant explicitly
-const tenantCollection = client.collections.get(collectionName).withTenant(organizationId);
-
-// searchSimilar: OR-of-ANDs over allowed scopes, AND'd with an expiry filter
-const scopeFilters = allowedScopes.map((scope) =>
-  Filters.and(
-    tenantCollection.filter.byProperty('scopeType').equal(scope.scopeType),
-    tenantCollection.filter.byProperty('scopeId').equal(scope.scopeId),
-  ),
-);
-const notExpired = tenantCollection.filter.byProperty('expiresAt').greaterThan(new Date());
-const combinedFilter = Filters.and(Filters.or(...scopeFilters), notExpired);
+```text
+Scope
+  scopeType
+  scopeId
 ```
+
+Common examples include organization-wide knowledge, project knowledge, and
+ephemeral conversation attachments. These are not a required enumeration. Scope
+types come from the target product's actual isolation and lifecycle boundaries.
+
+## Indexed chunk model
+
+| Field role | Example field | Evidence | Notes |
+|---|---|---|---|
+| Stable chunk identity | `chunkId` | Validated | Exact-match identity |
+| Stable document identity | `documentId` | Validated | Exact-match identity |
+| Retrieved content | `text` | Validated | Searchable content, not an authorization field |
+| Scope discriminator | `scopeType`, `scopeId` | Validated | Mandatory intra-tenant filter |
+| Owner or actor metadata | `ownerActorId` | Validated | Domain-specific audit and policy context |
+| Display name | `documentName` | Validated | Keep exact and partial-search representations separate when needed |
+| Retention class | `retentionPolicy` | Validated | Drives cleanup behavior |
+| Creation and expiry | `createdAt`, `expiresAt` | Validated | Expiry remains an active retrieval filter until deletion |
+| Pipeline identity | `pipelineId` | Extension | Separates incompatible chunking and ingestion paths |
+| Chunking strategy | `chunkingStrategyId` | Extension | Identifies formatter and splitter behavior |
+| Embedding generation | `embeddingGenerationId` | Extension | Associates the chunk with one vector space |
+| Normalized content hash | `contentHash` | Extension | Hash of the exact text sent for document embedding |
+| Source freshness token | `sourceRevision` | Extension | Detects work made stale during processing |
+
+The hard tenant key may be stored as metadata, encoded in the storage tenant or
+partition, or both. It is always mandatory in the authorized operation context,
+even when the storage boundary makes it implicit on the indexed object.
+
+## Authorized retrieval context
+
+```text
+AuthorizedRetrievalContext
+  hardTenantKey
+  allowedScopes[]
+  actorBindings
+  activeGenerationId
+  currentTime
+```
+
+The policy compiler creates this immutable context. Dense, lexical, hybrid,
+reranked, fallback, delete, and offline mutation paths all consume the same
+tenant and scope constraints.
+
+## Portable filter shape
+
+```text
+tenantBoundary = selectTenant(hardTenantKey)
+scopeFilter = OR over allowed scopes of (scopeType AND scopeId)
+freshnessFilter = expiresAt is absent or expiresAt is after currentTime
+generationFilter = object belongs to activeGenerationId when generations share storage
+effectiveFilter = scopeFilter AND freshnessFilter AND generationFilter
+```
+
+Use a non-null expiry sentinel only when the selected store benefits from it and
+the behavior is verified. The portable invariant is active exclusion of expired
+content, not a particular representation.
+
+## Concrete Weaviate example
+For a multi-tenant Weaviate collection, the hard tenant key selects the Weaviate
+tenant before the query runs. The object properties hold scope, expiry,
+identity, content, and generation metadata. The query applies the OR-of-ANDs
+scope filter plus expiry and, when generations share a collection, the explicit
+generation filter. Exact configuration, tokenization, and client syntax remain
+implementation concerns verified against the selected supported release.
 
 ## Related knowledge
 - [DOUBLE_SANDBOXING](../patterns/DOUBLE_SANDBOXING.md)
 - [MULTITENANT_RAG_ARCHITECTURE](../patterns/MULTITENANT_RAG_ARCHITECTURE.md)
-- [weaviate-native-multitenancy-vs-qdrant](../decisions/weaviate-native-multitenancy-vs-qdrant.md)
+- [VERSIONED_EMBEDDING_GENERATIONS](../patterns/VERSIONED_EMBEDDING_GENERATIONS.md)
+- [storage-native-multitenancy-over-payload-filtering](../decisions/storage-native-multitenancy-over-payload-filtering.md)
 
 ## Related skills
-- [rag-weaviate-double-sandbox-bootstrap](../../skills/rag-weaviate-double-sandbox-bootstrap.md)
+- [rag-double-sandbox-bootstrap](../../skills/rag-double-sandbox-bootstrap.md)
 
 ## Source
-Source materials are intentionally excluded from this public repository.
-Date: 2026-07-01
+Core fields were extracted from a validated multi-tenant RAG implementation.
+Generation and integrity fields are compatible extensions and are labeled as
+such rather than retroactively attributed to the reference installation.
+Date: 2026-08-26

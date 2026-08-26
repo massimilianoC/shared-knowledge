@@ -45,7 +45,7 @@ The reusable unit is a complete package under [`domains/`](domains/README.md):
 | --- | --- |
 | [`domains/spec-first-agentic-development/`](domains/spec-first-agentic-development/README.md) | Bootstrapping and operating spec-first agentic projects. |
 | [`domains/llm-provider/`](domains/llm-provider/README.md) | Reliable LLM outputs and multi-provider platform engineering. |
-| [`domains/rag-system/`](domains/rag-system/README.md) | Multi-tenant RAG architecture and anti-leakage controls. |
+| [`domains/rag-system/`](domains/rag-system/README.md) | Architecture-neutral multi-tenant RAG isolation, embedding generations, retrieval lifecycle, and quality controls. |
 | [`domains/capture/`](domains/capture/README.md) | Server-side screenshot and PDF capture. |
 | [`domains/workflow-automation/`](domains/workflow-automation/README.md) | Durable workflow automation with a typed node graph and visual runtime UI. |
 

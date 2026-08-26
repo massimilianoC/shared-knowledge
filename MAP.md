@@ -8,7 +8,7 @@ Canonical catalog of self-contained domain packages. Copy a package directory in
 | --- | --- | --- |
 | `capture/` | 2 skills, 1 agents, 6 knowledge files | [capture/ README](domains/capture/README.md) |
 | `llm-provider/` | 9 skills, 2 agents, 11 knowledge files | [llm-provider/ README](domains/llm-provider/README.md) |
-| `rag-system/` | 2 skills, 1 agents, 6 knowledge files | [rag-system/ README](domains/rag-system/README.md) |
+| `rag-system/` | 3 skills, 1 agent, 11 knowledge files | [rag-system/ README](domains/rag-system/README.md) |
 | `spec-first-agentic-development/` | 15 skills, 2 agents, 19 knowledge files | [spec-first-agentic-development/ README](domains/spec-first-agentic-development/README.md) |
 | `workflow-automation/` | 1 skill, 0 agents, 2 knowledge files | [workflow-automation/ README](domains/workflow-automation/README.md) |
 
@@ -89,8 +89,9 @@ Entry point: [domains/rag-system/README.md](domains/rag-system/README.md)
 
 | Class | File | Purpose |
 | --- | --- | --- |
+| `general` | [rag-double-sandbox-bootstrap](domains/rag-system/skills/rag-double-sandbox-bootstrap.md) | Skill: RAG Double-Sandbox Bootstrap |
 | `general` | [rag-multitenancy-leakage-audit](domains/rag-system/skills/rag-multitenancy-leakage-audit.md) | Skill: RAG Multi-Tenancy Leakage Audit |
-| `general` | [rag-weaviate-double-sandbox-bootstrap](domains/rag-system/skills/rag-weaviate-double-sandbox-bootstrap.md) | Skill: RAG Weaviate Double-Sandbox Bootstrap |
+| `general` | [rag-retrieval-quality-benchmark](domains/rag-system/skills/rag-retrieval-quality-benchmark.md) | Skill: RAG Retrieval Quality Benchmark |
 
 ### Agents
 
@@ -102,12 +103,17 @@ Entry point: [domains/rag-system/README.md](domains/rag-system/README.md)
 
 | Type | File | Topic |
 | --- | --- | --- |
-| pattern | [DOUBLE_SANDBOXING](domains/rag-system/knowledge/patterns/DOUBLE_SANDBOXING.md) | Pattern: Double Sandboxing (Two Independent Isolation Layers) |
-| pattern | [MULTITENANT_RAG_ARCHITECTURE](domains/rag-system/knowledge/patterns/MULTITENANT_RAG_ARCHITECTURE.md) | Pattern: Multi-Tenant RAG Service Architecture |
-| decision | [anti-leakage-test-suite-as-gate](domains/rag-system/knowledge/decisions/anti-leakage-test-suite-as-gate.md) | Decision: Anti-leakage E2E suite is a mandatory merge gate |
-| decision | [self-provided-embeddings](domains/rag-system/knowledge/decisions/self-provided-embeddings.md) | Decision: Self-provided embeddings, not server-side vectorization |
-| decision | [weaviate-native-multitenancy-vs-qdrant](domains/rag-system/knowledge/decisions/weaviate-native-multitenancy-vs-qdrant.md) | Decision: Weaviate native multi-tenancy over Qdrant payload-partitioning |
-| domain | [rag-tenant-scope-data-model](domains/rag-system/knowledge/domain/rag-tenant-scope-data-model.md) | Domain: Multi-Tenant RAG — Token Claims and Chunk Data Model |
+| pattern | [DOUBLE_SANDBOXING](domains/rag-system/knowledge/patterns/DOUBLE_SANDBOXING.md) | Pattern: Double Sandboxing with Independent Policy and Storage Boundaries |
+| pattern | [HYBRID_RETRIEVAL_WITH_SCOPED_FALLBACK](domains/rag-system/knowledge/patterns/HYBRID_RETRIEVAL_WITH_SCOPED_FALLBACK.md) | Pattern: Hybrid Retrieval with Scoped Fallback |
+| pattern | [MULTITENANT_RAG_ARCHITECTURE](domains/rag-system/knowledge/patterns/MULTITENANT_RAG_ARCHITECTURE.md) | Pattern: Architecture-Neutral Multi-Tenant RAG Service |
+| pattern | [OFFLINE_ONLINE_RAG_PIPELINE](domains/rag-system/knowledge/patterns/OFFLINE_ONLINE_RAG_PIPELINE.md) | Pattern: Separate Offline Build, Online Retrieval, and Generation Control |
+| pattern | [VERSIONED_EMBEDDING_GENERATIONS](domains/rag-system/knowledge/patterns/VERSIONED_EMBEDDING_GENERATIONS.md) | Pattern: Versioned Embedding Generations |
+| decision | [anti-leakage-test-suite-as-gate](domains/rag-system/knowledge/decisions/anti-leakage-test-suite-as-gate.md) | Decision: Anti-Leakage Tests Are a Mandatory Gate |
+| decision | [atomic-embedding-generation-activation](domains/rag-system/knowledge/decisions/atomic-embedding-generation-activation.md) | Decision: Build Embedding Generations Beside Production and Activate Atomically |
+| decision | [fail-closed-security-graceful-retrieval-degradation](domains/rag-system/knowledge/decisions/fail-closed-security-graceful-retrieval-degradation.md) | Decision: Fail Closed for Security, Degrade Gracefully for Optional Retrieval Capabilities |
+| decision | [self-provided-embeddings](domains/rag-system/knowledge/decisions/self-provided-embeddings.md) | Decision: Self-Provide Embeddings through an Independent Capability |
+| decision | [storage-native-multitenancy-over-payload-filtering](domains/rag-system/knowledge/decisions/storage-native-multitenancy-over-payload-filtering.md) | Decision: Prefer Storage-Native Multi-Tenancy over Shared Payload Filtering |
+| domain | [rag-tenant-scope-data-model](domains/rag-system/knowledge/domain/rag-tenant-scope-data-model.md) | Domain: Multi-Tenant RAG Authorization, Chunk, and Generation Model |
 
 ## Package: `spec-first-agentic-development/`
 
