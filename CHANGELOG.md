@@ -2,6 +2,17 @@
 
 All notable public releases are recorded here. Release identifiers follow the [versioning policy](VERSIONING.md).
 
+## 2026.11.06.2-docs.library — 2026-11-06
+
+### Added
+
+- Public community files: `SECURITY.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `CITATION.cff`, issue forms, and a pull request template.
+- `ROADMAP.md` with the planned `agentic-cad-3d-printing` and `audio-transcription` packages.
+
+### Changed
+
+- Rewrote the root README with package contents, artifact model, agent and human quick starts, reuse examples, and quality guarantees.
+
 ## 2026.11.06.1-refactor.library — 2026-11-06
 
 ### Changed

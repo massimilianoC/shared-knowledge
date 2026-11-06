@@ -1,0 +1,30 @@
+name: Skill, agent, or package proposal
+description: Propose new reusable material.
+labels: [proposal]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options: [Skill, Agent, Pattern or decision, New domain package]
+    validations:
+      required: true
+  - type: input
+    id: domain
+    attributes:
+      label: Target package
+      description: Existing package name, or the proposed name for a new one.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and reuse value
+      description: What problem does it solve and why is it reusable beyond one project?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: How do you know it works? Do not include secrets or client data.

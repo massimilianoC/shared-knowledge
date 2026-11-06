@@ -2,7 +2,7 @@
 
 This repository uses **calendar versioning with a semantic release suffix**. It is designed for a knowledge library: the date tells readers when a published snapshot was made, while the suffix explains the meaningful kind and scope of the change.
 
-Current release: [`2026.11.06.1-refactor.library`](VERSION).
+Current release: [`2026.11.06.2-docs.library`](VERSION).
 
 ## Release identifier
 

@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this library, please cite it as below."
+title: "Shared Knowledge: reusable skills, agents, and patterns for AI-enabled systems"
+type: software
+authors:
+  - family-names: Camillucci
+    given-names: Massimiliano
+repository-code: "https://github.com/massimilianoC/shared-knowledge"
+license: MIT
+abstract: >-
+  A curated, copyable library of reusable skills, agents, architectural patterns,
+  decisions, and starter templates for building reliable AI-enabled systems.
+keywords:
+  - ai-agents
+  - agentic-development
+  - llm
+  - rag
+  - knowledge-base

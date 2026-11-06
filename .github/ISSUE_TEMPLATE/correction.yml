@@ -1,0 +1,21 @@
+name: Correction or unclear guidance
+description: Report a wrong, outdated, broken, or confusing artifact.
+labels: [correction]
+body:
+  - type: input
+    id: path
+    attributes:
+      label: Artifact path
+      placeholder: domains/llm-provider/skills/output/llm-json-parsing.md
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong or unclear?
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix (optional)
