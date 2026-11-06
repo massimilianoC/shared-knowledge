@@ -6,7 +6,7 @@ Bootstraps a new project using the **Spec-First Agentic Development (SFAD)** met
 ## When to invoke
 - The user is starting a new repository and wants to "do it right".
 - The user has an empty (or near-empty) repo and asks for help structuring it before writing code.
-- The user mentions *Spec-First*, *SFAD*, *agentic methodology*, *AGENTS.md*, or asks to apply the Beehouse-style approach to another project.
+- The user mentions *Spec-First*, *SFAD*, *agentic methodology*, or *AGENTS.md*.
 - The user wants to retrofit SFAD on an existing repo (skip the Pre-`src/` gate, still produce documents in priority order).
 
 Do **not** invoke when:
@@ -15,8 +15,8 @@ Do **not** invoke when:
 
 ## Expected inputs
 Gather in order, one at a time if not provided inline:
-1. **Project name** (canonical), e.g., "Beehouse Admin Dashboard".
-2. **Repo slug**, e.g., `v1_beehouse_admin_dashboard`.
+1. **Project name** (canonical), e.g., "Operations Dashboard".
+2. **Repo slug**, e.g., `operations-dashboard`.
 3. **Project kind**: "admin frontend", "REST API service", "mobile app", "CLI tool", "library", ...
 4. **SSoT (Single Source of Truth)**: who owns domain truth. If this repo IS the SSoT, confirm explicitly.
 5. **Primary audience**: roles / personas.

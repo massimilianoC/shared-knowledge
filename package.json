@@ -1,0 +1,12 @@
+{
+  "name": "shared-knowledge-validation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "test:examples": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

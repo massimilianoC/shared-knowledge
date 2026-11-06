@@ -2,7 +2,7 @@
 
 - **Status**: accepted
 - **Date**: 2026-05-21
-- **Context source**: SFAD ADR Procedure (Beehouse Admin Dashboard)
+- **Context source**: SFAD ADR procedure
 
 ## Context
 Architectural decisions made in chat threads, PR comments, or design docs scattered across Notion/Confluence become invisible 6 months later. Future devs (and future agents) re-debate the same point because the rationale is missing.

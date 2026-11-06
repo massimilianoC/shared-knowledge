@@ -28,4 +28,4 @@ ${PROJECT_VISION}
 
 ## Methodology
 
-This repository follows the **Spec-First Agentic Development (SFAD)** methodology. The full kit lives in [`docs/methodology/`](docs/methodology/) (or in your shared internal repo of methodology kits).
+This repository follows the **Spec-First Agentic Development (SFAD)** methodology. Keep the selected SFAD package available as a separate reference; copy it into this repository only if the team chooses to maintain a local methodology directory.

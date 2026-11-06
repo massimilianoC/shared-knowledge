@@ -2,12 +2,14 @@
 
 Canonical catalog of self-contained domain packages. Copy a package directory intact to preserve its skills, agents, knowledge, templates, and relative links.
 
+Repository-only [example validation](validation/README.md) is maintained separately from the copyable packages.
+
 ## Package Index
 
 | Package | Scope | Entry point |
 | --- | --- | --- |
 | `capture/` | 2 skills, 1 agents, 6 knowledge files | [capture/ README](domains/capture/README.md) |
-| `llm-provider/` | 9 skills, 2 agents, 11 knowledge files | [llm-provider/ README](domains/llm-provider/README.md) |
+| `llm-provider/` | 11 skills, 3 agents, 13 knowledge files | [llm-provider/ README](domains/llm-provider/README.md) |
 | `rag-system/` | 3 skills, 1 agent, 11 knowledge files | [rag-system/ README](domains/rag-system/README.md) |
 | `spec-first-agentic-development/` | 15 skills, 2 agents, 19 knowledge files | [spec-first-agentic-development/ README](domains/spec-first-agentic-development/README.md) |
 | `workflow-automation/` | 1 skill, 0 agents, 2 knowledge files | [workflow-automation/ README](domains/workflow-automation/README.md) |
@@ -52,11 +54,13 @@ Entry point: [domains/llm-provider/README.md](domains/llm-provider/README.md)
 | `output` | [llm-mermaid-diagram-rendering](domains/llm-provider/skills/output/llm-mermaid-diagram-rendering.md) | Skill: LLM-Generated Mermaid Diagram Rendering |
 | `output` | [llm-output-repair](domains/llm-provider/skills/output/llm-output-repair.md) | Skill: LLM Output Repair (State Machine) |
 | `platform` | [llm-background-tasks](domains/llm-provider/skills/platform/llm-background-tasks.md) | Skill: LLM Background Tasks and Image Generation |
+| `platform` | [classification-benchmark](domains/llm-provider/skills/platform/classification-benchmark.md) | Skill: Benchmark a Classifier on Labeled Data |
 | `platform` | [llm-context-budget](domains/llm-provider/skills/platform/llm-context-budget.md) | Skill: LLM Context Budget Management |
 | `platform` | [llm-cost-tracking](domains/llm-provider/skills/platform/llm-cost-tracking.md) | Skill: LLM Cost Tracking |
 | `platform` | [llm-credit-engine](domains/llm-provider/skills/platform/llm-credit-engine.md) | Skill: LLM Credit Engine (Abstract Credits) |
 | `platform` | [llm-gateway-router](domains/llm-provider/skills/platform/llm-gateway-router.md) | Skill: LLM Gateway Router |
 | `platform` | [multiprovider-llm-catalog](domains/llm-provider/skills/platform/multiprovider-llm-catalog.md) | Skill: Multi-Provider LLM Catalog |
+| `platform` | [system-one-typed-decisions](domains/llm-provider/skills/platform/system-one-typed-decisions.md) | Skill: Integrate System One Typed Decisions |
 
 ### Agents
 
@@ -64,6 +68,7 @@ Entry point: [domains/llm-provider/README.md](domains/llm-provider/README.md)
 | --- | --- |
 | [llm-output-processor](domains/llm-provider/agents/llm-output-processor.md) | Agent: LLM Output Processor |
 | [multiprovider-llm-architect](domains/llm-provider/agents/multiprovider-llm-architect.md) | Agent: Multi-Provider LLM Architect |
+| [typed-classifier-adoption-agent](domains/llm-provider/agents/typed-classifier-adoption-agent.md) | Agent: Typed Classifier Adoption |
 
 ### Knowledge
 
@@ -73,6 +78,7 @@ Entry point: [domains/llm-provider/README.md](domains/llm-provider/README.md)
 | pattern | [LLM_JSON_PARSING_GUIDELINES](domains/llm-provider/knowledge/patterns/LLM_JSON_PARSING_GUIDELINES.md) | LLM JSON Parsing — Guidelines and Techniques |
 | pattern | [LLM_MODEL_DISCOVERY](domains/llm-provider/knowledge/patterns/LLM_MODEL_DISCOVERY.md) | Pattern: LLM Model Discovery (Bootstrap + On-Demand) |
 | pattern | [MULTIPROVIDER_LLM_ARCHITECTURE](domains/llm-provider/knowledge/patterns/MULTIPROVIDER_LLM_ARCHITECTURE.md) | Pattern: Multi-Provider LLM Architecture |
+| pattern | [CONFIDENCE_GATED_CLASSIFICATION](domains/llm-provider/knowledge/patterns/CONFIDENCE_GATED_CLASSIFICATION.md) | Pattern: Confidence-Gated Classification with an Auditable Benchmark |
 | decision | [llm-cost-tracking-dual-source](domains/llm-provider/knowledge/decisions/llm-cost-tracking-dual-source.md) | Decision: Dual-source cost tracking — provider-reported vs flat-rate |
 | decision | [llm-dual-source-catalog](domains/llm-provider/knowledge/decisions/llm-dual-source-catalog.md) | Decision: Dual-source catalog — env vs MongoDB |
 | decision | [llm-json-score-vs-first-match](domains/llm-provider/knowledge/decisions/llm-json-score-vs-first-match.md) | Decision: Score-based selection vs first-match in LLM repair flows |
@@ -80,6 +86,13 @@ Entry point: [domains/llm-provider/README.md](domains/llm-provider/README.md)
 | decision | [render-into-scratch-node-not-framework-dom](domains/llm-provider/knowledge/decisions/render-into-scratch-node-not-framework-dom.md) | Decision: Render into a detached scratch node, then inject the serialized string |
 | decision | [reset-fallback-state-per-streaming-attempt](domains/llm-provider/knowledge/decisions/reset-fallback-state-per-streaming-attempt.md) | Decision: Reset transient fallback state on every attempt, not just on success |
 | domain | [llm-platform-data-model](domains/llm-provider/knowledge/domain/llm-platform-data-model.md) | Domain: LLM Gateway Platform — Data Model |
+| domain | [typed-decision-provider-contract](domains/llm-provider/knowledge/domain/typed-decision-provider-contract.md) | Domain: Typed-Decision Models in an LLM Provider Platform |
+
+### Templates
+
+| File | Purpose |
+| --- | --- |
+| [classification-benchmark-kit](domains/llm-provider/templates/classification-benchmark-kit/README.md) | Portable typed-classifier benchmark harness, task example, and smoke-test dataset |
 
 ## Package: `rag-system/`
 

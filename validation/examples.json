@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "runnable": [
+    {
+      "id": "typed-decision-benchmark",
+      "entry": "domains/llm-provider/templates/classification-benchmark-kit/systemone-bench.mjs",
+      "files": [
+        "domains/llm-provider/templates/classification-benchmark-kit/systemone-bench.mjs",
+        "domains/llm-provider/templates/classification-benchmark-kit/task.example.mjs",
+        "domains/llm-provider/templates/classification-benchmark-kit/task.typesafe.example.mjs",
+        "domains/llm-provider/templates/classification-benchmark-kit/dataset.example.jsonl"
+      ],
+      "test": "validation/tests/benchmark-kit.test.mjs"
+    }
+  ]
+}

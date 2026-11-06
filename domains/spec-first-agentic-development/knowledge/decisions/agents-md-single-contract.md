@@ -2,7 +2,7 @@
 
 - **Status**: superseded by [tool-neutral-agent-contract-with-adapters](tool-neutral-agent-contract-with-adapters.md) on 2026-08-24
 - **Date**: 2026-05-21
-- **Context source**: extracted from SFAD methodology kit (Beehouse Admin Dashboard)
+- **Context source**: extracted from the SFAD methodology kit
 
 ## Context
 A modern repo is touched by Claude, Gemini, Copilot, Cursor, Codex, in-house agents. Each assistant has its own conventions for which file it reads as "system instructions". The naive approach is to maintain one file per assistant (`CLAUDE.md`, `GEMINI.md`, ...) — each duplicating the same rules.

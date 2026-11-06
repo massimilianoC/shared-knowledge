@@ -7,7 +7,7 @@ A curated library of reusable AI-agent skills, agent definitions, architectural 
 Use this procedure when you have this repository's public URL or local path and need guidance for another project.
 
 1. Read this file, then [`domains/README.md`](domains/README.md).
-2. Match the request to one package: `spec-first-agentic-development` for project methodology, `llm-provider` for LLM-provider engineering, `rag-system` for multi-tenant retrieval, `workflow-automation` for durable workflow platforms, or `capture` for screenshot/PDF generation.
+2. Match the request to one package: `spec-first-agentic-development` for project methodology, `llm-provider` for generative or typed-decision model integration, `rag-system` for multi-tenant retrieval, `workflow-automation` for durable workflow platforms, or `capture` for screenshot/PDF generation.
 3. Read only that package's `README.md`; do not load unrelated packages.
 4. Select the smallest suitable artifact:
    - choose an **agent** for an end-to-end workflow;
@@ -44,7 +44,7 @@ The reusable unit is a complete package under [`domains/`](domains/README.md):
 | Package | Use it for |
 | --- | --- |
 | [`domains/spec-first-agentic-development/`](domains/spec-first-agentic-development/README.md) | Bootstrapping and operating spec-first agentic projects. |
-| [`domains/llm-provider/`](domains/llm-provider/README.md) | Reliable LLM outputs and multi-provider platform engineering. |
+| [`domains/llm-provider/`](domains/llm-provider/README.md) | Generative LLM outputs, multi-provider engineering, and typed-decision model contracts. |
 | [`domains/rag-system/`](domains/rag-system/README.md) | Architecture-neutral multi-tenant RAG isolation, embedding generations, retrieval lifecycle, and quality controls. |
 | [`domains/capture/`](domains/capture/README.md) | Server-side screenshot and PDF capture. |
 | [`domains/workflow-automation/`](domains/workflow-automation/README.md) | Durable workflow automation with a typed node graph and visual runtime UI. |
@@ -62,7 +62,12 @@ To reuse a package, copy its entire directory into the target repository, read i
 ```text
 domains/             copyable domain packages
 templates/           generic authoring templates
+validation/          repository-only example tests and agent instructions
 ```
+
+## Validate supplied examples
+
+Run `npm test` with Node 20 or later. The offline suite executes registered runnable examples against local mocks and checks documentary templates, package links, and source-project neutrality. Its [agent instructions](validation/AGENTS.md) and [coverage guide](validation/README.md) live outside `domains/` so copied packages do not carry repository test infrastructure.
 
 ## License
 

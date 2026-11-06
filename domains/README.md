@@ -7,7 +7,7 @@ Each directory in this folder is a self-contained knowledge package. It can be c
 | Package | Purpose | Entry point |
 | --- | --- | --- |
 | [`spec-first-agentic-development/`](spec-first-agentic-development/README.md) | Spec-First Agentic Development: bootstrap and operate a project with durable agent context. | [`spec-first-agentic-development/README.md`](spec-first-agentic-development/README.md) |
-| [`llm-provider/`](llm-provider/README.md) | LLM output processing and multi-provider platform engineering. | [`llm-provider/README.md`](llm-provider/README.md) |
+| [`llm-provider/`](llm-provider/README.md) | Generative LLM integration and typed-decision model specialization under distinct provider contracts. | [`llm-provider/README.md`](llm-provider/README.md) |
 | [`rag-system/`](rag-system/README.md) | Architecture-neutral multi-tenant RAG isolation, embedding generations, retrieval lifecycle, and quality controls. | [`rag-system/README.md`](rag-system/README.md) |
 | [`capture/`](capture/README.md) | Server-side HTML, screenshot, and PDF artifact capture. | [`capture/README.md`](capture/README.md) |
 | [`workflow-automation/`](workflow-automation/README.md) | Durable automated workflows with a typed node graph and visual runtime UI. | [`workflow-automation/README.md`](workflow-automation/README.md) |
@@ -23,4 +23,4 @@ Each directory in this folder is a self-contained knowledge package. It can be c
 
 ## Repository-wide assets
 
-[`../templates/`](../templates/) contains generic skill and agent authoring templates. The root README and [`../MAP.md`](../MAP.md) are navigation aids and are not required by a copied domain package.
+[`../templates/`](../templates/) contains generic skill and agent authoring templates. Repository-only validation lives under `validation/`; it is not part of a copied domain package. The root README and [`../MAP.md`](../MAP.md) are navigation aids and are not required by a copied domain package.

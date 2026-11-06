@@ -5,7 +5,7 @@ How do you integrate multiple LLM providers — OpenAI-compatible, Anthropic, or
 
 ## Solution
 
-**All OpenAI-compatible providers share the same API shape:**
+**Chat-completion-capable providers using an OpenAI-compatible chat contract share this API shape:**
 
 ```
 POST {baseUrl}/chat/completions
@@ -17,6 +17,8 @@ Content-Type: application/json
 
 Compatible providers include OpenAI, SiliconFlow, OpenRouter, LM Studio, Ollama, Together.ai,
 Groq, Azure OpenAI, and many others.
+
+This is a chat contract, not a rule for every model exposed by those providers. A typed-decision model uses a separate `state`/`questions` input and `answers` output. Catalog its capability and request contract separately, then select a dedicated adapter; see [typed-decision provider contract](../domain/typed-decision-provider-contract.md).
 
 ## Recommended structure
 

@@ -36,7 +36,8 @@ export interface LlmModel {
     id: string;                   // Real provider ID, for example "Qwen/Qwen3-32B"
     provider: string;             // Logical key, for example "siliconflow"
     role: PipelineModelRole;
-    capabilities: string[];       // ["chat"] | ["vision","chat"] | ["image_generation"]
+    capabilities: string[];       // ["chat"] | ["vision","chat"] | ["image_generation"] | ["decision"]
+    requestContract?: "chat" | "typed-decision"; // Select the adapter independently of provider identity.
     isDefault: boolean;           // Primary model for that role
     isFallback: boolean;          // Backup if the default fails
     isActive: boolean;
@@ -79,6 +80,8 @@ Provider notes:
 - SiliconFlow and OpenRouter → `authType: "bearer"`
 - Direct OpenAI → `authType: "api-key"`
 - Anthropic → `authType: "api-key"` plus `x-api-key` in a dedicated adapter
+
+Authentication and transport metadata do not identify the inference contract. A provider may expose both chat and typed decisions. Register decision models with `capabilities: ["decision"]` and `requestContract: "typed-decision"`; the [typed-decision provider contract](../../knowledge/domain/typed-decision-provider-contract.md) describes their separate adapter.
 
 ### 3. Validate configuration with Zod at bootstrap
 
@@ -198,6 +201,7 @@ export function buildDefaultLmStudioCatalog(baseUrl: string): LlmProviderCatalog
 - [llm-cost-tracking](llm-cost-tracking.md)
 - [llm-background-tasks](llm-background-tasks.md)
 - [llm-json-parsing](../output/llm-json-parsing.md)
+- [system-one-typed-decisions](system-one-typed-decisions.md)
 
 ## Source
 Source materials are intentionally excluded from this public repository.

@@ -34,10 +34,10 @@ templates/
 
 ## Placeholders convention
 
-- `${PROJECT_NAME}` — the project's canonical name (e.g., "Beehouse Admin Dashboard").
-- `${REPO_SLUG}` — the repository slug (e.g., `v1_beehouse_admin_dashboard`).
+- `${PROJECT_NAME}` — the project's canonical name (e.g., "Operations Dashboard").
+- `${REPO_SLUG}` — the repository slug (e.g., `operations-dashboard`).
 - `${PROJECT_KIND}` — one phrase: "admin frontend", "API service", "mobile app", ...
-- `${SSOT_NAME}` — the Single Source of Truth name (e.g., "Beehouse backend", "Stripe", "in-repo").
+- `${SSOT_NAME}` — the Single Source of Truth name (e.g., "service API" or "in-repo").
 - `${PROJECT_LANGUAGE}` — documentation language for the project (e.g., "Italian", "English"). Code identifiers stay English by convention.
 - `${PRIMARY_AUDIENCE}` — primary users (roles, personas, or team names).
 - `${NON_AUDIENCE}` — explicit non-audience.

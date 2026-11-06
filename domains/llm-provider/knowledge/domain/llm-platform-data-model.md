@@ -15,6 +15,7 @@ Configuration of the LLM providers: endpoints, auth mode, and status.
 | displayName | string | UI label |
 | baseUrl | string | resolved from env vars at runtime |
 | apiType | enum | `openai-compatible` \| `anthropic-compatible` \| `custom` |
+| requestContract | enum | Default contract for this provider route, such as `chat` or `typed-decision`; override at model level if the provider offers both |
 | authType | enum | `api-key` \| `bearer` \| `none` |
 | enabled | bool | primary routing gate |
 | timeoutMs | number | timeout for provider calls |
@@ -28,7 +29,8 @@ Catalog of enabled models per provider.
 | providerKey | string | FK → providers_registry |
 | modelKey | string | real provider ID, for example `Qwen/Qwen3-32B` |
 | displayName | string | UI label |
-| capability | enum | `chat` \| `embedding` \| `image` \| `rerank` |
+| capability | enum | `chat` \| `decision` \| `embedding` \| `image` \| `rerank` |
+| requestContract | enum | `chat` \| `typed-decision`; selects the request and response adapter independently of `providerKey` |
 | contextWindow | number | maximum input tokens |
 | maxOutputTokens | number | maximum output tokens |
 | enabled | bool | routing gate |
@@ -43,7 +45,7 @@ Rates used to compute abstract credits per provider, model, and capability.
 |---|---|---|
 | providerKey | string | `*` = wildcard for all providers |
 | modelKey | string | `*` = wildcard for all models of the provider |
-| capability | string | `chat` \| `embedding` \| ... |
+| capability | string | `chat` \| `decision` \| `embedding` \| ... |
 | inputCreditsPer1k | number | credits per 1k input tokens |
 | outputCreditsPer1k | number | credits per 1k output tokens |
 | cacheReadCreditsPer1k | number | optional |
@@ -61,6 +63,7 @@ Immutable log of every LLM call, serving as the primary source for analytics and
 | providerKey | string | |
 | modelKey | string | |
 | capability | string | |
+| requestContract | string | The contract used for this call, such as `chat` or `typed-decision` |
 | tokensIn | number | |
 | tokensOut | number | |
 | creditsCharged | number | charged in abstract credit units |
@@ -95,12 +98,6 @@ db.credit_rates.find({ active: true }).sort({ providerKey: 1, modelKey: 1 })
 // Providers accessible to one organization
 db.org_provider_access.find({ organizationId: '<orgId>', enabled: true }, { providerKey: 1 })
 ```
-
-## Real snapshot (2026-04-17)
-- `providers_registry`: 4 documents (`lmstudio`, `siliconflow`, `comfyui`, `rag-service`)
-- `provider_models_catalog`: 84 documents
-- `org_provider_access`: 2 documents
-- `credit_rates`: 6 documents
 
 ## Source
 Extracted from: MULTIPROVIDER_MULTIMODEL_PLATFORM_PLAYBOOK.md

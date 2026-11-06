@@ -2,7 +2,7 @@
 
 - **Status**: accepted
 - **Date**: 2026-05-21
-- **Context source**: SFAD Pillar 1 + Pre-`src/` Checklist (Beehouse Admin Dashboard)
+- **Context source**: SFAD Pillar 1 and Pre-`src/` checklist
 
 ## Context
 The dominant industry default is to write code first and document later. The result is:

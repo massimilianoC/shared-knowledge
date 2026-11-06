@@ -94,7 +94,7 @@ See [`docs/architecture/SECURITY_AND_AUTH.md`](docs/architecture/SECURITY_AND_AU
 
 ## 8. UI/UX rules (if applicable)
 
-See [`docs/ui-ux/DESIGN_PRINCIPLES.md`](docs/ui-ux/DESIGN_PRINCIPLES.md). Highlights:
+If this project uses a UI flavor, read its `docs/ui-ux/DESIGN_PRINCIPLES.md`. Highlights:
 
 - Destructive confirmations require typing the resource name.
 - Long-running operations show as `Job` with a link to detail.

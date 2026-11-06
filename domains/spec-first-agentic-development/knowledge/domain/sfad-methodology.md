@@ -4,9 +4,8 @@
 **SFAD** is a project bootstrap and ongoing-development methodology designed for repositories that will be touched by multiple AI coding assistants alongside humans. It treats documentation as load-bearing infrastructure, not a deliverable produced after code stabilizes.
 
 ## Origin
-- Distilled from the **Beehouse Admin Dashboard** repository (`v1_beehouse_admin_dashboard`).
-- Beehouse is the canonical reference instance: a React + TS + Zod admin console talking to a separate backend SSoT, with IoT + AI + reporting concerns.
-- The methodology was extracted from Beehouse's actual `docs/` shape, `AGENTS.md`, and lessons learned during M0–M2.
+
+Distilled from applied multi-contributor software delivery and generalized into a tool-neutral method. Source material is archived outside the copyable package; no source project is a required reference instance.
 
 ## Core ideas
 - **Spec-first**: vision → architecture → requirements → roadmap → execution exist as Markdown before any line of `src/`.
@@ -52,7 +51,7 @@ For 1-week prototypes, SFAD collapses to: `AGENTS.md` + `README.md` + one-milest
 - `docs/planning/EXTERNAL_DEPENDENCY_ENABLEMENT_SPEC.md` — evolving (when applicable)
 
 ## Calibration knobs (project-level)
-| Knob | Beehouse example | How to pick |
+| Knob | General example | How to pick |
 | :--- | :--- | :--- |
 | Documentation language | Italian replies + English code | Pick one, declare in `AGENTS.md` §12. |
 | Milestone size | M0..M8, 2–4 weeks each | Smaller teams collapse to M0..M3. |
@@ -85,7 +84,6 @@ Source materials are intentionally excluded from this public repository.
 - `procedures/00-OVERVIEW.md` … `06-PR_AND_DOD_PROCEDURE.md` — how-to playbooks.
 - `checklists/PRE_SRC_CHECKLIST.md`, `MILESTONE_OPEN_CHECKLIST.md`, `MILESTONE_CLOSE_CHECKLIST.md`, `PR_CHECKLIST.md`, `ADR_CHECKLIST.md`.
 - `templates/core/`, `templates/flavors/frontend-react/` — copy-ready templates.
-- `examples/BEEHOUSE_AS_INSTANCE.md` — the reference instance walkthrough.
 - `skill/spec-first-bootstrap/SKILL.md` — the original Claude Code skill description.
 
 Source materials are intentionally excluded from this public repository.

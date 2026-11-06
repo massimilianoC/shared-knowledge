@@ -1,7 +1,7 @@
 # Skill: LLM Gateway Router
 
 ## Description
-Implements runtime routing for LLM calls inside a multi-provider API gateway:
+Implements runtime routing for chat-generation calls inside a multi-provider API gateway:
 it validates the provider and model, resolves the correct adapter, applies token policy,
 calls the provider, normalizes the response, and records usage plus charged credits.
 
@@ -15,6 +15,10 @@ calls the provider, normalizes the response, and records usage plus charged cred
 - A chat response in a unified schema
 - A persisted `usage_event` with tokens, latency, charged credits, and status
 - Credits charged to the organization wallet
+
+## Contract boundary
+
+The `messages` input, `adapter.chat(...)`, token policy, and unified chat response below define a **chat** route. A typed-decision model uses a separate `state`/`questions` request and `answers` response. Select that route by model capability and request contract, then use an `evaluate(...)` adapter and decision-result normalizer. Do not infer a chat contract from the provider or base URL. See [typed-decision provider contract](../../knowledge/domain/typed-decision-provider-contract.md).
 
 ## Steps / Procedure
 
@@ -110,6 +114,7 @@ All errors should include: `{ code, message, provider, model, correlationId }`
 - [multiprovider-llm-catalog](multiprovider-llm-catalog.md)
 - [llm-credit-engine](llm-credit-engine.md)
 - [llm-context-budget](llm-context-budget.md)
+- [system-one-typed-decisions](system-one-typed-decisions.md)
 
 ## Source
 Extracted from: MULTIPROVIDER_MULTIMODEL_PLATFORM_PLAYBOOK.md
